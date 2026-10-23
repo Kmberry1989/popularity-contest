@@ -106,7 +106,12 @@ function sfx(n){if(n=='tap')beep(500,.08);if(n=='match'){beep(660,.15);setTimeou
 function drumRoll(){if(!soundOn)return;let i=0;let t=setInterval(()=>{beep(120,.06,'square',.12);i++;if(i>14)clearInterval(t)},110)}
 function trumpet(){[523,659,784,1047].forEach((f,i)=>setTimeout(()=>beep(f,.35,'sawtooth',.12),i*140))}
 function trombone(){[220,196,165,131].forEach((f,i)=>setTimeout(()=>beep(f,.4,'sawtooth',.12),i*180))}
-let bgmTimer=null;function startBgm(){if(bgmTimer)return;let notes=[523,587,659,784,659,587];let i=0;bgmTimer=setInterval(()=>{if(soundOn)beep(notes[i%notes.length],.35,'sine',.04);i++},420)}
+let bgmTimer=null;
+function padNote(f,dur,type='sine',g=.03,attack=1.2){if(!soundOn)return;try{ctx=ctx||new (window.AudioContext||window.webkitAudioContext)();let o=ctx.createOscillator(),gn=ctx.createGain();o.type=type;o.frequency.value=f;let t=ctx.currentTime;gn.gain.setValueAtTime(0,t);gn.gain.linearRampToValueAtTime(g,t+attack);gn.gain.setValueAtTime(g,t+dur-1);gn.gain.linearRampToValueAtTime(0,t+dur);o.connect(gn);gn.connect(ctx.destination);o.start(t);o.stop(t+dur);}catch(e){}}
+function startBgm(){if(bgmTimer)return;let chords=[[261.6,329.6,392,493.9],[220,261.6,329.6,392],[174.6,220,261.6,329.6],[196,246.9,293.7,392]];let melody=[523.3,587.3,659.3,783.99,659.3,587.3,493.9,440];let m=0;function measure(){if(!soundOn){bgmTimer=setTimeout(measure,4000);return}let ch=chords[m%4];ch.forEach(f=>padNote(f,5.5,'sine',.028,1.4));padNote(ch[0]/2,5.5,'sine',.035,0.8);
+if(m%2===0){let n=melody[(m/2)%melody.length];setTimeout(()=>padNote(n,3,'triangle',.02,1),1200)}
+if(m%4===3){setTimeout(()=>padNote(melody[(m+3)%melody.length],3.5,'sine',.018,1),2400)}
+m++;bgmTimer=setTimeout(measure,4000)}measure()}
 document.getElementById('soundBtn').onclick=e=>{soundOn=!soundOn;e.target.textContent=soundOn?'🔊':'🔇 Sound off';if(soundOn)startBgm()};
 const $=id=>document.getElementById(id);
 function avatarReact(kind){const a=$('youAvatar');a.style.transform='scale(1.2)';setTimeout(()=>a.style.transform='',900)}
@@ -137,7 +142,8 @@ let sc=SCENES[m.bucket]||SCENES.cozy;let sb=$('sceneBox');sb.className='scene '+
 $('roundLabel').textContent=phase==='pairs'?('Round 1 • Pair '+(currentIdx+1)+' / '+PAIRS.length):'🏆 • '+(bracketQueue.length)+' left';
 $('turnLabel').textContent=myPicks[m.id]?'✓ You picked — waiting for partner':'Your turn';
 let box=$('pairBox');box.innerHTML='';
-[[m.a,m.ea,0],[m.b,m.eb,1]].forEach(([label,emoji,side])=>{let d=document.createElement('div');d.className='opt glow'+(myPicks[m.id]===label?' picked':'');d.innerHTML=`<span class="emoji">${emoji}</span><b>${label}</b>`;d.style.touchAction='none';
+const IMG={"Blanket fort":"img/cozy-blanket-fort.webp","Porch swing":"img/cozy-porch-swing.webp","Fireplace":"img/cozy-fireplace.webp","String lights":"img/cozy-string-lights.webp","Reading nook":"img/cozy-reading-nook.webp"};
+[[m.a,m.ea,0],[m.b,m.eb,1]].forEach(([label,emoji,side])=>{let d=document.createElement('div');d.className='opt glow'+(myPicks[m.id]===label?' picked':'');d.innerHTML=IMG[label]?`<img src="${IMG[label]}" style="width:100%;height:120px;object-fit:cover;border-radius:12px"><b>${label}</b>`:`<span class="emoji">${emoji}</span><b>${label}</b>`;d.style.touchAction='none';
 d.onclick=()=>{if(myPicks[m.id])return;pendingPick=label;$('confirmBtn').disabled=false;document.querySelectorAll('.opt').forEach(o=>o.classList.remove('picked'));d.classList.add('picked');sfx('tap')};
 let sx=0,sy=0,dx=0,dy=0,dragging=false;
 d.addEventListener('pointerdown',e=>{if(myPicks[m.id])return;dragging=true;sx=e.clientX;sy=e.clientY;d.classList.add('dragging');d.setPointerCapture(e.pointerId)});
@@ -150,7 +156,7 @@ if(myPicks[m.id]&&partnerPicks[m.id]){rev.classList.remove('hidden');let match=m
 if(revealedId===m.id){rev.innerHTML=`<p>${match?'💖 Match!':'💛 Different picks'} — You: ${myPicks[m.id]} • Them: ${partnerPicks[m.id]}</p><button id="nextBtn">Next →</button>`;rev.querySelector('#nextBtn').onclick=nextMatchup;}
 else{revealedId=m.id;
 if(myPicks[m.id]===m.b){youEmoji=m.eb} if(partnerPicks[m.id]===m.b){themEmoji=m.eb} if(partnerPicks[m.id]===m.a){themEmoji=m.ea}
-rev.innerHTML=`<div class="revealstage"><p style="font-size:28px">🥁 Drum roll…</p><div class="flipscene"><div class="flip" id="flipYou"><div><span style="font-size:48px">❓</span><b>You</b></div><div class="back"><span style="font-size:48px">${youEmoji}</span><b>${myPicks[m.id]}</b></div></div><div class="flip" id="flipThem"><div><span style="font-size:48px">❓</span><b>Them</b></div><div class="back"><span style="font-size:48px">${themEmoji}</span><b>${partnerPicks[m.id]}</b></div></div></div><p id="revealResult" style="font-size:20px">…</p><button id="nextBtn" class="hidden">Next →</button></div>`;
+rev.innerHTML=`<div class="revealstage"><p style="font-size:28px">🥁 Drum roll…</p><div class="flipscene"><div class="flip" id="flipYou"><div><span style="font-size:48px">❓</span><b>You</b></div><div class="back">${IMG[myPicks[m.id]]?`<img src="${IMG[myPicks[m.id]]}" style="width:100%;height:90px;object-fit:cover;border-radius:12px">`:`<span style="font-size:48px">${youEmoji}</span>`}<b>${myPicks[m.id]}</b></div></div><div class="flip" id="flipThem"><div><span style="font-size:48px">❓</span><b>Them</b></div><div class="back">${IMG[partnerPicks[m.id]]?`<img src="${IMG[partnerPicks[m.id]]}" style="width:100%;height:90px;object-fit:cover;border-radius:12px">`:`<span style="font-size:48px">${themEmoji}</span>`}<b>${partnerPicks[m.id]}</b></div></div></div><p id="revealResult" style="font-size:20px">…</p><button id="nextBtn" class="hidden">Next →</button></div>`;
 drumRoll();
 setTimeout(()=>{document.getElementById('flipYou').classList.add('flipped')},600);
 setTimeout(()=>{document.getElementById('flipThem').classList.add('flipped')},1100);
