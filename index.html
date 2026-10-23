@@ -11,9 +11,9 @@ button.small{padding:8px 14px;font-size:15px;min-height:40px;background:#fff}
 input{width:100%;padding:12px;border-radius:12px;border:2px solid #e8c9a0;font-size:17px;color:#3b2a1e}
 .dots{display:flex;gap:8px;justify-content:center;padding:8px}
 .dot{width:12px;height:12px;border-radius:50%;background:#e8c9a0}.dot.on{background:#ff8a3d}
-.pairwrap{flex:1;display:flex;gap:10px;position:relative;overflow:hidden;touch-action:none}
+.pairwrap{flex:1;display:flex;flex-direction:column;gap:10px;position:relative;overflow:hidden;touch-action:none}
 .opt{flex:1;border:3px solid #e8c9a0;border-radius:22px;overflow:hidden;background:#fffdf6;transition:transform .2s,opacity .2s,border-color .2s;display:flex;flex-direction:column}
-.opt img{width:100%;flex:1;object-fit:cover;min-height:0}
+.opt img{width:100%;flex:1;object-fit:contain;min-height:0;background:#fffdf6}
 .opt b{padding:10px;text-align:center;font-size:18px}
 .opt.chosen{border-color:#ff8a3d;transform:scale(1.03);box-shadow:0 0 0 4px rgba(255,138,61,.3)}
 .opt.dim{opacity:.35;transform:scale(.96)}
@@ -25,14 +25,26 @@ input{width:100%;padding:12px;border-radius:12px;border:2px solid #e8c9a0;font-s
 .slidein{animation:slidein .45s ease}@keyframes slidein{from{transform:translateX(40%);opacity:0}to{transform:none;opacity:1}}
 .revealrow{display:flex;gap:10px;margin:8px 0}
 .revealcard{flex:1;border:3px solid #e8c9a0;border-radius:16px;padding:8px;text-align:center;background:#fffdf6}
-.revealcard img{width:100%;height:90px;object-fit:cover;border-radius:10px}
+.revealcard img{width:100%;height:90px;object-fit:contain;border-radius:10px;background:#fffdf6}
 .scroll{overflow:auto;flex:1}
 .card{background:#fffdf6;border:3px solid #e8c9a0;border-radius:20px;padding:12px;margin:8px 0}
+
+.float{position:fixed;width:28px;height:28px;border-radius:50%;background:rgba(255,138,61,.25);z-index:0;animation:floaty 7s ease-in-out infinite;pointer-events:none}
+@keyframes floaty{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-24px) rotate(20deg)}}
+.screen{position:relative;z-index:1}
+.playgraphic{width:140px;height:140px;border:0;background:transparent;box-shadow:none;padding:0;animation:bob 2.2s ease-in-out infinite}
+.playgraphic:hover{transform:scale(1.08)} .playgraphic:active{transform:scale(.92)}
+.playgraphic img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 8px 12px rgba(0,0,0,.2))}
+@keyframes bob{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-8px) scale(1.04)}}
+#confirmBtn{animation:pulse 1s ease-in-out infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+.holdfill{position:absolute;left:0;bottom:0;width:100%;height:0%;background:rgba(76,175,80,.45);z-index:2;pointer-events:none}
+.opt{position:relative}
 </style></head><body>
-<div class="screen active" id="menuScreen">
+<div class="float" style="left:8%;top:12%"></div><div class="float" style="right:10%;top:22%;animation-delay:1.5s;background:rgba(255,93,143,.25)"></div><div class="float" style="left:14%;bottom:18%;animation-delay:3s;background:rgba(76,175,80,.25)"></div><div class="float" style="right:16%;bottom:28%;animation-delay:2s"></div><div class="screen active" id="menuScreen">
 <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px">
 <img src="logo.webp" alt="" style="height:96px">
-<button class="big" id="playBtn">Play</button>
+<button class="playgraphic" id="playBtn"><img src="img/brand-play-button.webp" alt=""></button>
 <button class="small" id="moreBtn">More</button>
 </div></div>
 
@@ -104,12 +116,14 @@ function syncRoom(){if(!db||!roomId)return;onSnapshot(roomRef(),snap=>{if(!snap.
 function runPairs(){let out=[];for(let i=0;i<5;i++){let idx=(runStart+i)%PAIRS.length;out.push({id:'p'+idx,a:PAIRS[idx][0],b:PAIRS[idx][1],bucket:PAIRS[idx][4]})}return out}
 function renderPair(){let pairs=runPairs();let m=pairs[runIdx];$('dots').innerHTML=pairs.map((_,i)=>`<span class="dot ${i===runIdx?'on':''}"></span>`).join('');let wrap=$('pairWrap');wrap.classList.remove('slideout-left','slideout-right');wrap.classList.add('slidein');setTimeout(()=>wrap.classList.remove('slidein'),500);let a=$('optA'),b=$('optB');a.classList.remove('chosen','dim');b.classList.remove('chosen','dim');a.innerHTML=`<img src="${IMG[m.a]||''}" alt=""><b>${m.a}</b>`;b.innerHTML=`<img src="${IMG[m.b]||''}" alt=""><b>${m.b}</b>`;$('confirmBar').classList.remove('show');preview=null}
 function previewPick(side){let m=runPairs()[runIdx];let label=side==='a'?m.a:m.b;preview={side,label};$('optA').classList.toggle('chosen',side==='a');$('optA').classList.toggle('dim',side==='b');$('optB').classList.toggle('chosen',side==='b');$('optB').classList.toggle('dim',side==='a');beep(900,.1,'triangle');$('confirmImg').src=IMG[label]||'';$('confirmLabel').textContent=label;$('confirmBar').classList.add('show')}
-$('optA').onclick=()=>previewPick('a');$('optB').onclick=()=>previewPick('b');
-let sx=0,dx=0,dragging=false;
-let pw=$('pairWrap');
-pw.addEventListener('pointerdown',e=>{sx=e.clientX;dx=0;dragging=true});
-pw.addEventListener('pointermove',e=>{if(!dragging)return;dx=e.clientX-sx;if(Math.abs(dx)>30){previewPick(dx>0?'b':'a')}});
-pw.addEventListener('pointerup',e=>{dragging=false;if(preview)beep(500,.08)});
+
+
+let holdTimer=null,holdStart=0,holdSide=null;
+function startHold(side){let m=runPairs()[runIdx];let label=side==='a'?m.a:m.b;holdSide=side;holdStart=Date.now();let el=side==='a'?$('optA'):$('optB');let fill=document.createElement('div');fill.className='holdfill';fill.id='holdFill';el.appendChild(fill);
+holdTimer=setInterval(()=>{let p=Math.min(100,(Date.now()-holdStart)/2000*100);let f=$('holdFill');if(f)f.style.height=p+'%';if(p>=100){clearInterval(holdTimer);holdTimer=null;previewPick(side);beep(900,.1,'triangle');}},50);}
+function endHold(){if(holdTimer){clearInterval(holdTimer);holdTimer=null}let f=$('holdFill');if(f)f.remove();if(!preview){$('optA').classList.remove('chosen','dim');$('optB').classList.remove('chosen','dim');}}
+$('optA').addEventListener('pointerdown',()=>startHold('a'));$('optB').addEventListener('pointerdown',()=>startHold('b'));
+window.addEventListener('pointerup',endHold);window.addEventListener('pointercancel',endHold);
 $('confirmBtn').onclick=async()=>{if(!preview)return;let m=runPairs()[runIdx];myPicks[m.id]=preview.label;beep(660,.15);if(db&&roomId){try{let ref=roomRef(),snap=await getDoc(ref);let picks=snap.data()?.picks||{};picks[user?.uid||'guest']=myPicks;await updateDoc(ref,{picks})}catch(e){}}let dir=preview.side==='b'?'slideout-right':'slideout-left';$('pairWrap').classList.add(dir);setTimeout(()=>{runIdx++;if(runIdx>=5){finishRun()}else{renderPair()}},450)};
 async function finishRun(){let pairs=runPairs();let done=pairs.every(p=>myPicks[p.id]);if(!done){show('waitingScreen');return}let partnerDone=pairs.every(p=>partnerPicks[p.id]);if(partnerDone){showReveal()}else{show('waitingScreen');$('waitingDetail').textContent='You finished 5. Waiting for your partner to finish the same 5.'}}
 function checkReveal(){if(document.getElementById('waitingScreen').classList.contains('active')){let pairs=runPairs();if(pairs.every(p=>myPicks[p.id]&&partnerPicks[p.id]))showReveal()}}
