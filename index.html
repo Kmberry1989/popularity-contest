@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>This or That — Clay Craft</title>
+<title>Popularity Contest — Clay Craft</title>
 <style>
 *{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,sans-serif;background:#fff6e8;color:#3b2a1e;min-height:100vh}
 header{padding:12px;text-align:center;background:#ffe9c9;position:sticky;top:0;z-index:5}
@@ -37,7 +37,7 @@ input{width:100%;padding:12px;border-radius:12px;border:2px solid #e8c9a0;font-s
 .opt.glow{animation:pulseGlow 1.6s infinite}
 .opt.dragging{position:relative;z-index:10;transform:scale(1.1);box-shadow:0 10px 20px rgba(0,0,0,.2)}
 </style></head><body>
-<header><h1>🐵 This or That</h1><div class="sub">Clay Craft • public • anyone with a link can play</div></header>
+<header><h1>🐵 Popularity Contest</h1><div class="sub">Clay Craft • public • anyone with a link can play</div></header>
 <div class="wrap">
 <div class="card" id="authCard">
 <img class="avatar" id="avatarImg" src="monkey-clay.webp" alt="Clay monkey avatar">
@@ -170,7 +170,7 @@ let coinPlaced=false;
 $('coin').onpointerdown=e=>{coinPlaced=true;$('capsuleMsg').textContent='Coin in slot! Now turn the lever.';sfx('tap')};
 $('leverBtn').onclick=()=>{if(!coinPlaced){$('capsuleMsg').textContent='Drag the coin to the slot first.';return}$('capsuleBox').classList.add('rumble');sfx('pop');setTimeout(()=>{$('capsuleBox').classList.remove('rumble');$('capsuleBox').textContent='🥚';$('capsuleMsg').innerHTML='Capsule out! Tap it to open. <button id="openCap">Open</button>';$('openCap').onclick=()=>{let prizes=['🧣 Scarf','🎩 Hat','🌸 Flower','👑 Crown','🕶️ Glasses','🎀 Bow'];let p=prizes[Math.floor(Math.random()*prizes.length)];$('capsuleMsg').textContent='You got: '+p+' — it is now on your avatar!';unlockBadge('Capsule: '+p);sfx('win');avatarReact('celebrate');}},800)};
 $('bracketBtn').onclick=()=>{let b=$('bracketBox');b.classList.toggle('hidden');b.innerHTML='<p class="small">Bracket: winners from Round 1 face off, bucket by bucket, then the 4 bucket champions face off. Your current bracket queue: '+(bracketQueue.length||'— play Round 1 first')+'</p>'};
-async function shareLink(){let url=location.href.split('?')[0]+(roomId?'?room='+roomId:'');let text='Your turn in This or That!';if(navigator.share){try{await navigator.share({title:'This or That',text,url});return}catch(e){}}
+async function shareLink(){let url=location.href.split('?')[0]+(roomId?'?room='+roomId:'');let text='Your turn in Popularity Contest!';if(navigator.share){try{await navigator.share({title: "Popularity Contest",text,url});return}catch(e){}}
 try{await navigator.clipboard.writeText(text+' '+url);alert('Link copied — paste it into Messages.')}catch(e){location.href='sms:?body='+encodeURIComponent(text+' '+url)}}
 $('shareBtn').onclick=shareLink;$('nudgeBtn').onclick=shareLink;
 // --- friends, messaging, spoiler-free newsfeed ---
