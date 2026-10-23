@@ -147,7 +147,7 @@ const SCENES={cozy:{cls:'scene-cozy',bg:'🏠 🛋️ 🔥',target:'🧺',hint:'
 function render(){
 let m=currentMatchup();if(!m)return;
 pendingPick=null;$('confirmBtn').disabled=true;
-let sc=SCENES[m.bucket]||SCENES.cozy;let sb=$('sceneBox');sb.className='scene '+sc.cls;sb.textContent=sc.bg;$\('targetBox').textContent=sc.target;let cl=$('catLogo');if(cl)cl.src='img/brand-logo-'+(m.bucket||'cozy')+'.webp';$('dragHint').textContent=sc.hint;
+let sc=SCENES[m.bucket]||SCENES.cozy;let sb=$('sceneBox');sb.className='scene '+sc.cls;sb.textContent=sc.bg;$('targetBox').textContent=sc.target;let cl=$('catLogo');if(cl)cl.src='img/brand-logo-'+(m.bucket||'cozy')+'.webp';$('dragHint').textContent=sc.hint;
 $('roundLabel').textContent=phase==='pairs'?('Round 1 • Pair '+(currentIdx+1)+' / '+PAIRS.length):'🏆 • '+(bracketQueue.length)+' left';
 $('turnLabel').textContent=myPicks[m.id]?'✓ You picked — waiting for partner':'Your turn';
 let box=$('pairBox');box.innerHTML='';
