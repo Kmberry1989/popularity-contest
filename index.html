@@ -67,6 +67,10 @@ input{width:100%;padding:12px;border-radius:12px;border:2px solid #e8c9a0;font-s
 <div id="bracketBox" class="hidden"></div>
 </div>
 
+<div class="card"><h2 style="margin:0">👥 Friends</h2><p class="small">Tap a friend to message them. No picks are shown here, ever.</p><div id="friendsList"></div><div class="row"><input id="friendName" placeholder="Friend name"><button id="addFriendBtn">Add friend</button></div><div id="chatBox" class="hidden"><h3 id="chatTitle" style="margin:8px 0"></h3><div id="chatMsgs" style="max-height:180px;overflow:auto"></div><div class="row"><input id="chatInput" placeholder="Message…"><button id="sendMsgBtn">Send</button></div><div class="row"><button class="sec" onclick="quickMsg('❤️')">❤️</button><button class="sec" onclick="quickMsg('😂')">😂</button><button class="sec" onclick="quickMsg('👍')">👍</button><button class="sec" onclick="quickMsg('Your turn!')">Your turn!</button></div></div></div>
+
+<div class="card"><h2 style="margin:0">📰 Newsfeed</h2><p class="small">Stats and comparisons only — no selections spoiled.</p><div id="feedBox"></div></div>
+
 <div class="card hidden" id="slotCard"><h2 style="margin:0">🎰 Bonus round</h2><div class="slot" id="slotReels">❤️ ⭐ 🐵</div><button id="spinBtn">Spin</button><p id="slotMsg"></p></div>
 
 <div class="card hidden" id="capsuleCard"><h2 style="margin:0">🪙 Capsule machine</h2><p class="small">Drag the coin to the slot, then turn the lever.</p>
@@ -88,7 +92,8 @@ const PAIRS=[
 ["Snow day","Beach day","❄️","🏖️","seasons"],["Fall leaves","Spring flowers","🍂","🌸","seasons"],["Mountains","Lake","⛰️","🏞️","seasons"],["Sunset","Starry night","🌇","🌌","seasons"],["Garden path","Forest trail","🌿","🌲","seasons"],["Pumpkin patch","Apple orchard","🎃","🍎","seasons"],["Snowman","Picnic","⛄","🧺","seasons"],["Cherry blossoms","Sunflowers","🌸","🌻","seasons"],["Fireflies","Snowflakes","✨","❄️","seasons"],["Ice skating","Swimming","⛸️","🏊","seasons"],["Rain boots","Sunglasses","🥾","🕶️","seasons"],["Harvest moon","Northern lights","🌕","🌌","seasons"],["River","Waterfall","🏞️","💦","seasons"],["Meadow","Valley","🌾","🏔️","seasons"],["Seaside","Countryside","🌊","🌾","seasons"],
 ["Cat","Dog","🐱","🐶","animals"],["Bunny","Bird","🐰","🐦","animals"],["Panda","Penguin","🐼","🐧","animals"],["Fox","Deer","🦊","🦌","animals"],["Dolphin","Sea turtle","🐬","🐢","animals"],["Owl","Squirrel","🦉","🐿️","animals"],["Koala","Red panda","🐨","🦝","animals"],["Butterfly","Ladybug","🦋","🐞","animals"],["Hedgehog","Raccoon","🦔","🦝","animals"],["Elephant","Giraffe","🐘","🦒","animals"],["Frog","Duckling","🐸","🦆","animals"],["Lion","Tiger","🦁","🐯","animals"],["Swan","Flamingo","🦢","🦩","animals"],["Otter","Beaver","🦦","🦫","animals"],["Chipmunk","Mouse","🐿️","🐭","animals"],
 ["Sofa","Loveseat","🛋️","🪑","cozy"],["Ottoman","Footstool","🛋️","🦶","cozy"],["Curtains","Blinds","🪟","🪟","cozy"],["Fire pit","Sauna","🔥","🧖","cozy"],["Window seat","Balcony","🪟","🌇","cozy"],["Burrito","Quesadilla","🌯","🧀","food"],["Ramen","Pho","🍜","🍲","food"],["Sushi","Dumplings","🍣","🥟","food"],["Chicken soup","Tomato soup","🍲","🍅","food"],["Sandwich","Wrap","🥪","🌯","food"],["Desert","Jungle","🏜️","🌴","seasons"],["Glacier","Volcano","🧊","🌋","seasons"],["Vineyard","Lavender field","🍇","🪻","seasons"],["Lighthouse","Windmill","🗼","🌬️","seasons"],["Canyon","Cliff","🏜️","🧗","seasons"],["Wolf","Bear","🐺","🐻","animals"],["Zebra","Hippo","🦓","🦛","animals"],["Peacock","Parrot","🦚","🦜","animals"],["Kangaroo","Platypus","🦘","🦫","animals"],["Crab","Starfish","🦀","⭐","animals"],
-["Daybed","Futon","🛏️","🛋️","cozy"],["Pajamas","Loungewear","👘","🧥","cozy"],["Throw rug","Sheepskin rug","🧶","🐑","cozy"],["Dresser","Vanity","🪑","🪞","cozy"],["Attic nook","Basement den","🏠","🕳️","cozy"],["Steak","Salmon","🥩","🐟","food"],["Curry","Stir fry","🍛","🥘","food"],["Biscuits","Scones","🍪","🥮","food"],["Chocolate cake","Vanilla cake","🍫","🍰","food"],["Fruit tart","Lemon bar","🍓","🍋","food"],["Rose garden","Tulip field","🌹","🌷","seasons"],["Ice cave","Sand dune","🧊","🏜️","seasons"],["Sunrise","Moonrise","🌅","🌙","seasons"],["Rainforest","Savanna","🌴","🦒","seasons"],["Thunderstorm","Gentle rain","⛈️","🌧️","seasons"],["Cheetah","Leopard","🐆","🐆","animals"],["Gorilla","Orangutan","🦍","🦧","animals"],["Seahorse","Jellyfish","🪸","🪼","animals"],["Robin","Cardinal","🐦","🐦","animals"],["Lamb","Calf","🐑","🐄","animals"]
+["Daybed","Futon","🛏️","🛋️","cozy"],["Pajamas","Loungewear","👘","🧥","cozy"],["Throw rug","Sheepskin rug","🧶","🐑","cozy"],["Dresser","Vanity","🪑","🪞","cozy"],["Attic nook","Basement den","🏠","🕳️","cozy"],["Steak","Salmon","🥩","🐟","food"],["Curry","Stir fry","🍛","🥘","food"],["Biscuits","Scones","🍪","🥮","food"],["Chocolate cake","Vanilla cake","🍫","🍰","food"],["Fruit tart","Lemon bar","🍓","🍋","food"],["Rose garden","Tulip field","🌹","🌷","seasons"],["Ice cave","Sand dune","🧊","🏜️","seasons"],["Sunrise","Moonrise","🌅","🌙","seasons"],["Rainforest","Savanna","🌴","🦒","seasons"],["Thunderstorm","Gentle rain","⛈️","🌧️","seasons"],["Cheetah","Leopard","🐆","🐆","animals"],["Gorilla","Orangutan","🦍","🦧","animals"],["Seahorse","Jellyfish","🪸","🪼","animals"],["Robin","Cardinal","🐦","🐦","animals"],["Lamb","Calf","🐑","🐄","animals"],
+["Red","Blue","🔴","🔵","color"],["Pink","Purple","🩷","🟣","color"],["Black","White","⚫","⚪","color"],["Gold","Silver","🟡","⚪","color"],["Teal","Coral","🩵","🪸","color"],["Navy","Sky blue","🔵","🩵","color"],["Green","Yellow","🟢","🟡","color"],["Orange","Pink","🟠","🩷","color"],["Brown","Beige","🟤","🔶","color"],["Lavender","Mint","🪻","🌿","color"],["Crimson","Burgundy","🔴","🍷","color"],["Turquoise","Emerald","🩵","💚","color"],["Gray","Charcoal","⬜","⬛","color"],["Peach","Lemon","🍑","🍋","color"],["Magenta","Cyan","🩷","🩵","color"],["Indigo","Violet","🟣","🟪","color"],["Rose","Ruby","🌹","💎","color"],["Olive","Sage","🫒","🌿","color"],["Bronze","Copper","🥉","🟠","color"],["Cream","Taupe","🍦","🟤","color"],["Hot pink","Baby blue","🩷","🩵","color"],["Forest green","Lime","🌲","🍋","color"],["Maroon","Mustard","🟤","🟡","color"],["Pastel pink","Pastel blue","🩷","🩵","color"],["Rainbow","Monochrome","🌈","⬛","color"]
 ];
 // --- state, sound, helpers ---
 let roomId=new URLSearchParams(location.search).get('room')||'', room=null, myPicks={}, partnerPicks={}, level=1, xp=0, coins=0, streak=0, badgesList=[];
@@ -118,12 +123,12 @@ let currentIdx=0, bracketQueue=[], phase='pairs';
 function currentMatchup(){if(phase==='pairs')return {id:'p'+currentIdx,a:PAIRS[currentIdx][0],b:PAIRS[currentIdx][1],ea:PAIRS[currentIdx][2],eb:PAIRS[currentIdx][3],bucket:PAIRS[currentIdx][4]};
 let m=bracketQueue[0];return m}
 let pendingPick=null;
-const SCENES={cozy:{cls:'scene-cozy',bg:'🏠 🛋️ 🔥',target:'🧺',hint:'Drag your pick to the cozy basket, then confirm.'},food:{cls:'scene-food',bg:'🛒 🥦 🍞 🧃 — first-person grocery store, shelves ahead, cart in front',target:'🛒',hint:'Drag your pick to the shopping cart in front of you, then confirm.'},seasons:{cls:'scene-seasons',bg:'🌳 🌤️ 🍂',target:'🎒',hint:'Drag your pick to the backpack, then confirm.'},animals:{cls:'scene-animals',bg:'🐾 🌲 🦁',target:'🏠',hint:'Drag your pick to the pet carrier, then confirm.'},bracket:{cls:'scene-bracket',bg:'🏆 ✨',target:'🏆',hint:'Drag your pick to the trophy, then confirm.'}};
+const SCENES={cozy:{cls:'scene-cozy',bg:'🏠 🛋️ 🔥',target:'🧺',hint:'Drag your pick to the cozy basket, then confirm.'},food:{cls:'scene-food',bg:'🛒 🥦 🍞 🧃 — first-person grocery store, shelves ahead, cart in front',target:'🛒',hint:'Drag your pick to the shopping cart in front of you, then confirm.'},seasons:{cls:'scene-seasons',bg:'🌳 🌤️ 🍂',target:'🎒',hint:'Drag your pick to the backpack, then confirm.'},animals:{cls:'scene-animals',bg:'🐾 🌲 🦁',target:'🏠',hint:'Drag your pick to the pet carrier, then confirm.'},color:{cls:'scene-food',bg:'🎨 🌈 🖌️ — color studio',target:'🎨',hint:'Drag your pick to the paint palette, then confirm.'},bracket:{cls:'scene-bracket',bg:'🏆 ✨',target:'🏆',hint:'Drag your pick to the trophy, then confirm.'}};
 function render(){
 let m=currentMatchup();if(!m)return;
 pendingPick=null;$('confirmBtn').disabled=true;
 let sc=SCENES[m.bucket]||SCENES.cozy;let sb=$('sceneBox');sb.className='scene '+sc.cls;sb.textContent=sc.bg;$('targetBox').textContent=sc.target;$('dragHint').textContent=sc.hint;
-$('roundLabel').textContent=phase==='pairs'?('Round 1 • Pair '+(currentIdx+1)+' / 100'):'🏆 Bracket • '+(bracketQueue.length)+' left';
+$('roundLabel').textContent=phase==='pairs'?('Round 1 • Pair '+(currentIdx+1)+' / '+PAIRS.length):'🏆 Bracket • '+(bracketQueue.length)+' left';
 $('turnLabel').textContent=myPicks[m.id]?'✓ You picked — waiting for partner':'Your turn';
 let box=$('pairBox');box.innerHTML='';
 [[m.a,m.ea,0],[m.b,m.eb,1]].forEach(([label,emoji,side])=>{let d=document.createElement('div');d.className='opt glow'+(myPicks[m.id]===label?' picked':'');d.innerHTML=`<span class="emoji">${emoji}</span><b>${label}</b>`;d.style.touchAction='none';
@@ -168,5 +173,25 @@ $('bracketBtn').onclick=()=>{let b=$('bracketBox');b.classList.toggle('hidden');
 async function shareLink(){let url=location.href.split('?')[0]+(roomId?'?room='+roomId:'');let text='Your turn in This or That!';if(navigator.share){try{await navigator.share({title:'This or That',text,url});return}catch(e){}}
 try{await navigator.clipboard.writeText(text+' '+url);alert('Link copied — paste it into Messages.')}catch(e){location.href='sms:?body='+encodeURIComponent(text+' '+url)}}
 $('shareBtn').onclick=shareLink;$('nudgeBtn').onclick=shareLink;
+// --- friends, messaging, spoiler-free newsfeed ---
+let friends=JSON.parse(localStorage.getItem('tot_friends')||'[]');let chats=JSON.parse(localStorage.getItem('tot_chats')||'{}');let currentFriend=null;
+function saveFriends(){localStorage.setItem('tot_friends',JSON.stringify(friends));localStorage.setItem('tot_chats',JSON.stringify(chats));renderFriends();renderFeed();}
+function renderFriends(){let el=$('friendsList');if(!friends.length){el.innerHTML='<p class="small">No friends yet — join a room, then add your partner here.</p>';return}el.innerHTML=friends.map((f,i)=>`<button class="sec" onclick="openChat(${i})">👤 ${f}</button>`).join(' ')}
+window.openChat=i=>{currentFriend=friends[i];$('chatBox').classList.remove('hidden');$('chatTitle').textContent='Chat with '+currentFriend;renderChat()};
+function renderChat(){if(currentFriend==null)return;$('chatMsgs').innerHTML=(chats[currentFriend]||[]).map(m=>`<p>${m}</p>`).join('')||'<p class="small">Say hi — no picks are shared automatically.</p>'}
+function sendChat(text){if(currentFriend==null||!text)return;chats[currentFriend]=chats[currentFriend]||[];chats[currentFriend].push('You: '+text);saveFriends();renderChat();$('chatInput').value=''}
+$('addFriendBtn').onclick=()=>{let n=$('friendName').value.trim();if(!n)return;if(!friends.includes(n))friends.push(n);$('friendName').value='';saveFriends();sfx('match')};
+$('sendMsgBtn').onclick=()=>sendChat($('chatInput').value.trim());window.quickMsg=t=>sendChat(t);
+function renderFeed(){
+let total=Object.keys(myPicks).length,shared=Object.keys(myPicks).filter(k=>partnerPicks[k]).length,same=shared?Math.round(shared?Object.keys(myPicks).filter(k=>partnerPicks[k]&&myPicks[k]===partnerPicks[k]).length/shared*100:0):0;
+let items=[];
+items.push(`📊 You have made ${total} picks • Level ${level} • Streak ${streak} days`);
+if(shared)items.push(`💞 Similarity with your partner: ${same}% over ${shared} shared matchups — no picks revealed here`);
+if(badgesList.length)items.push(`🏅 Badges unlocked: ${badgesList.length} — ${badgesList.join(', ')}`);
+items.push(`👥 Friends: ${friends.length} • Rooms are public — anyone with a link can join a new pair`);
+$('feedBox').innerHTML=items.map(i=>`<p>${i}</p>`).join('')}
+// hook feed into existing updates
+let _origRender=render;render=function(){_origRender();renderFriends();renderFeed()};
+renderFriends();renderFeed();
 updateStreak();render();
 </script></body></html>
