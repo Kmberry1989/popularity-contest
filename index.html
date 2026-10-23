@@ -48,16 +48,21 @@ input{width:100%;padding:12px;border-radius:12px;border:2px solid #e8c9a0;font-s
 .opt.locked{animation:lockedpop .6s ease}
 @keyframes lockedpop{0%{transform:scale(1)}30%{transform:scale(1.12);box-shadow:0 0 0 10px rgba(255,138,61,.7),0 0 44px rgba(255,138,61,1)}60%{transform:scale(.96)}100%{transform:scale(1.05)}}
 .opt img{transition:transform .2s}
+
+#guessBanner{display:none;text-align:center;font-size:32px;font-weight:900;padding:10px;background:#7b5cff;color:#fff;border-radius:12px;margin-bottom:10px}
+#pairScreen.guessmode{background:linear-gradient(180deg,#e8e0ff,#d6c8ff)}
+#pairScreen.guessmode #guessBanner{display:block}
+#guessBtn{display:none}
 </style></head><body>
 <div class="float" style="left:8%;top:12%"></div><div class="float" style="right:10%;top:22%;animation-delay:1.5s;background:rgba(255,93,143,.25)"></div><div class="float" style="left:14%;bottom:18%;animation-delay:3s;background:rgba(76,175,80,.25)"></div><div class="float" style="right:16%;bottom:28%;animation-delay:2s"></div><div class="screen active" id="menuScreen">
 <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px">
 <img src="logo.png" alt="" style="height:96px">
 <button class="playgraphic" id="playBtn"><img src="img/brand-play-button.png" alt=""></button>
-<button class="small" id="moreBtn">More</button>
+<button class="small" id="moreBtn">More</button><button class="small" id="guessBtn">Guess</button>
 </div></div>
 
 <div class="screen" id="pairScreen">
-<div class="dots" id="dots"></div>
+<div id="guessBanner"></div><div class="dots" id="dots"></div>
 <div class="pairwrap" id="pairWrap">
 <div class="opt" id="optA"></div>
 <div class="opt" id="optB"></div>
@@ -81,6 +86,12 @@ input{width:100%;padding:12px;border-radius:12px;border:2px solid #e8c9a0;font-s
 <button class="small" id="revealMenuBtn">Menu</button>
 </div>
 
+<div class="screen" id="guessDoneScreen">
+<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;text-align:center">
+<div id="guessDoneName" style="font-size:32px;font-weight:900"></div>
+<div class="scroll" id="guessDoneList" style="width:100%"></div>
+<button class="small" id="guessDoneMenuBtn">Menu</button>
+</div></div>
 <div class="screen" id="moreScreen">
 <div style="font-size:22px;font-weight:800;text-align:center">More</div>
 <div class="scroll">
@@ -117,12 +128,12 @@ function trumpet(){[523,659,784,1047].forEach((f,i)=>setTimeout(()=>beep(f,.35,'
 function trombone(){[220,196,165,131].forEach((f,i)=>setTimeout(()=>beep(f,.4,'sawtooth',.12),i*180))}
 const $=id=>document.getElementById(id);
 function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));$(id).classList.add('active')}
-let roomId=new URLSearchParams(location.search).get('room')||'',room=null,myPicks={},partnerPicks={},runStart=0,runIdx=0,preview=null;
+let roomId=new URLSearchParams(location.search).get('room')||'',room=null,myPicks={},partnerPicks={},runStart=0,runIdx=0,preview=null;let guessMode=false,guessFriend='',guessPairs=[],guessPicks={};
 function roomRef(){return doc(db,'thisorthat_public',roomId)}
 async function ensureRoom(){if(!db)return;if(auth&&!user){try{await signInAnonymously(auth)}catch(e){}}let uid=user?.uid||('guest-'+Math.random().toString(36).slice(2));if(!roomId){roomId='room-'+Math.random().toString(36).slice(2,7);history.replaceState(null,'','?room='+roomId)}try{let ref=roomRef(),snap=await getDoc(ref);if(!snap.exists()){await setDoc(ref,{players:[{uid,name:'Player'}],picks:{},runStart:0,createdAt:Date.now()})}else{let d=snap.data();runStart=d.runStart||0;myPicks=d.picks?.[uid]||{}}}catch(e){}}
 function syncRoom(){if(!db||!roomId)return;onSnapshot(roomRef(),snap=>{if(!snap.exists())return;room=snap.data();let uid=user?.uid||'guest';let other=(room.players||[]).find(p=>p.uid!==uid);myPicks=room.picks?.[uid]||myPicks;partnerPicks=other?room.picks?.[other.uid]||{}:{};if(room.runStart!==undefined)runStart=room.runStart;checkReveal()})}
-function runPairs(){let out=[];for(let i=0;i<5;i++){let idx=(runStart+i)%PAIRS.length;out.push({id:'p'+idx,a:PAIRS[idx][0],b:PAIRS[idx][1],bucket:PAIRS[idx][4]})}return out}
-function renderPair(){let pairs=runPairs();let m=pairs[runIdx];$('dots').innerHTML=pairs.map((_,i)=>`<span class="dot ${i===runIdx?'on':''}"></span>`).join('');let wrap=$('pairWrap');wrap.classList.remove('slideout-left','slideout-right');wrap.classList.add('slidein');setTimeout(()=>wrap.classList.remove('slidein'),500);let a=$('optA'),b=$('optB');a.classList.remove('chosen','dim','glow','locked','holding');b.classList.remove('chosen','dim','glow','locked','holding');a.innerHTML=`<img src="${IMG[m.a]||''}" alt=""><b>${m.a}</b>`;b.innerHTML=`<img src="${IMG[m.b]||''}" alt=""><b>${m.b}</b>`;$('confirmBar').classList.remove('show');preview=null}
+function runPairs(){if(guessMode)return guessPairs;let out=[];for(let i=0;i<5;i++){let idx=(runStart+i)%PAIRS.length;out.push({id:'p'+idx,a:PAIRS[idx][0],b:PAIRS[idx][1],bucket:PAIRS[idx][4]})}return out}
+function renderPair(){let pairs=runPairs();$('guessBanner').textContent=guessMode?guessFriend:'';$('pairScreen').classList.toggle('guessmode',guessMode);let m=pairs[runIdx];$('dots').innerHTML=pairs.map((_,i)=>`<span class="dot ${i===runIdx?'on':''}"></span>`).join('');let wrap=$('pairWrap');wrap.classList.remove('slideout-left','slideout-right');wrap.classList.add('slidein');setTimeout(()=>wrap.classList.remove('slidein'),500);let a=$('optA'),b=$('optB');a.classList.remove('chosen','dim','glow','locked','holding');b.classList.remove('chosen','dim','glow','locked','holding');a.innerHTML=`<img src="${IMG[m.a]||''}" alt=""><b>${m.a}</b>`;b.innerHTML=`<img src="${IMG[m.b]||''}" alt=""><b>${m.b}</b>`;$('confirmBar').classList.remove('show');preview=null}
 function previewPick(side){let m=runPairs()[runIdx];let label=side==='a'?m.a:m.b;preview={side,label};$('optA').classList.toggle('chosen',side==='a');$('optA').classList.toggle('dim',side==='b');$('optB').classList.toggle('chosen',side==='b');$('optB').classList.toggle('dim',side==='a');beep(900,.1,'triangle');$('confirmImg').src=IMG[label]||'';$('confirmLabel').textContent=label;$('confirmBar').classList.add('show')}
 
 
@@ -132,11 +143,11 @@ holdTimer=setInterval(()=>{let p=Math.min(100,(Date.now()-holdStart)/2000*100);l
 function endHold(){if(holdTimer){clearInterval(holdTimer);holdTimer=null}let f=$('holdFill');if(f)f.remove();$('optA').classList.remove('holding');$('optB').classList.remove('holding');if(!preview){$('optA').classList.remove('chosen','dim','glow');$('optB').classList.remove('chosen','dim','glow');}}
 $('optA').addEventListener('pointerdown',()=>startHold('a'));$('optB').addEventListener('pointerdown',()=>startHold('b'));
 window.addEventListener('pointerup',endHold);window.addEventListener('pointercancel',endHold);
-$('confirmBtn').onclick=async()=>{if(!preview)return;let m=runPairs()[runIdx];myPicks[m.id]=preview.label;let el=preview.side==='a'?$('optA'):$('optB');el.classList.remove('glow');el.classList.add('locked');try{navigator.vibrate&&navigator.vibrate([60,40,120])}catch(e){}beep(660,.15);setTimeout(()=>beep(880,.2),120);setTimeout(()=>beep(1100,.3,'triangle'),240);if(db&&roomId){try{let ref=roomRef(),snap=await getDoc(ref);let picks=snap.data()?.picks||{};picks[user?.uid||'guest']=myPicks;await updateDoc(ref,{picks})}catch(e){}}let dir=preview.side==='b'?'slideout-right':'slideout-left';$('pairWrap').classList.add(dir);setTimeout(()=>{runIdx++;if(runIdx>=5){finishRun()}else{renderPair()}},450)};
+$('confirmBtn').onclick=async()=>{if(!preview)return;let m=runPairs()[runIdx];if(!guessMode)myPicks[m.id]=preview.label;let el=preview.side==='a'?$('optA'):$('optB');el.classList.remove('glow');el.classList.add('locked');try{navigator.vibrate&&navigator.vibrate([60,40,120])}catch(e){}beep(660,.15);setTimeout(()=>beep(880,.2),120);setTimeout(()=>beep(1100,.3,'triangle'),240);if(guessMode){guessPicks[m.id]=preview.label}else if(db&&roomId){try{let ref=roomRef(),snap=await getDoc(ref);let picks=snap.data()?.picks||{};picks[user?.uid||'guest']=myPicks;await updateDoc(ref,{picks})}catch(e){}}let dir=preview.side==='b'?'slideout-right':'slideout-left';$('pairWrap').classList.add(dir);setTimeout(()=>{runIdx++;if(runIdx>=5){if(guessMode){showGuessDone()}else{finishRun()}}else{renderPair()}},450)};
 async function finishRun(){let pairs=runPairs();let done=pairs.every(p=>myPicks[p.id]);if(!done){show('waitingScreen');return}let partnerDone=pairs.every(p=>partnerPicks[p.id]);if(partnerDone){showReveal()}else{show('waitingScreen');$('waitingDetail').textContent='You finished 5. Waiting for your partner to finish the same 5.'}}
 function checkReveal(){if(document.getElementById('waitingScreen').classList.contains('active')){let pairs=runPairs();if(pairs.every(p=>myPicks[p.id]&&partnerPicks[p.id]))showReveal()}}
 function showReveal(){show('revealScreen');let pairs=runPairs();$('revealList').innerHTML='';drumRoll();pairs.forEach((p,i)=>{let you=myPicks[p.id],them=partnerPicks[p.id];let match=you===them;let row=document.createElement('div');row.className='revealrow';row.innerHTML=`<div class="revealcard"><img src="${IMG[you]||''}"><div>You: ${you}</div></div><div class="revealcard"><img src="${IMG[them]||''}"><div>Them: ${them}</div></div>`;$('revealList').appendChild(row);setTimeout(()=>{if(match)trumpet();else trombone()},1200+i*600)})}
-$('playBtn').onclick=async()=>{startBgm();await ensureRoom();syncRoom();runIdx=0;show('pairScreen');renderPair()};
+$('playBtn').onclick=async()=>{guessMode=false;startBgm();await ensureRoom();syncRoom();runIdx=0;show('pairScreen');renderPair()};
 $('moreBtn').onclick=()=>{show('moreScreen');renderSurvey();renderFriends();renderFeed()};
 $('moreBackBtn').onclick=()=>show('menuScreen');
 $('waitMenuBtn').onclick=()=>show('menuScreen');
@@ -144,12 +155,17 @@ $('revealMenuBtn').onclick=()=>show('menuScreen');
 $('nextRunBtn').onclick=async()=>{runStart=(runStart+5)%PAIRS.length;if(db&&roomId){try{await updateDoc(roomRef(),{runStart})}catch(e){}}runIdx=0;show('pairScreen');renderPair()};
 $('nudgeBtn').onclick=async()=>{let url=location.href.split('?')[0]+(roomId?'?room='+roomId:'');let text='Your turn in Popularity Contest!';if(navigator.share){try{await navigator.share({title:"Popularity Contest",text,url});return}catch(e){}}try{await navigator.clipboard.writeText(text+' '+url)}catch(e){location.href='sms:?body='+encodeURIComponent(text+' '+url)}};
 $('checkBtn').onclick=()=>{syncRoom();setTimeout(checkReveal,500)};
+function showGuessDone(){show('guessDoneScreen');$('guessDoneName').textContent=guessFriend;$('guessDoneList').innerHTML=guessPairs.map(pr=>`<div class="card"><img src="${IMG[guessPicks[pr.id]]||''}" style="width:100%;height:120px;object-fit:contain"><div style="font-weight:800">${guessPicks[pr.id]||''}</div></div>`).join('')}
+$('guessBtn').onclick=()=>{let f=JSON.parse(localStorage.getItem('tot_friends')||'[]');if(!f.length)return;guessFriend=f[Math.floor(Math.random()*f.length)];guessMode=true;guessPicks={};let shuffled=[...PAIRS].sort(()=>Math.random()-.5).slice(0,5);guessPairs=shuffled.map((pr,i)=>({id:'g'+i,a:pr[0],b:pr[1],bucket:pr[4]}));startBgm();runIdx=0;show('pairScreen');renderPair()};
+$('guessDoneMenuBtn').onclick=()=>{guessMode=false;show('menuScreen')};
+function updateGuessBtn(){let f=JSON.parse(localStorage.getItem('tot_friends')||'[]');$('guessBtn').style.display=f.length?'block':'none'}
+updateGuessBtn();
 function renderSurvey(){let day=Math.floor(Date.now()/86400000);let q=SURVEYS[day%SURVEYS.length];let key='tot_survey_'+day;let ans=localStorage.getItem(key);$('surveyQ').textContent=q[0];$('surveyOpts').innerHTML=q[1].map((o,i)=>`<button ${ans?'disabled':''} onclick="window.answerSurvey(${i})">${o}</button>`).join('');$('surveyDone').textContent=ans?('Picked: '+q[1][ans]):''}
 window.answerSurvey=i=>{let day=Math.floor(Date.now()/86400000);localStorage.setItem('tot_survey_'+day,String(i));renderSurvey()};
 let friends=JSON.parse(localStorage.getItem('tot_friends')||'[]');let chats=JSON.parse(localStorage.getItem('tot_chats')||'{}');let currentFriend=null;
 function renderFriends(){let el=$('friendsList');el.innerHTML=friends.map((f,i)=>`<button class="small" onclick="window.openChat(${i})">${f}</button>`).join(' ')||''}
 window.openChat=i=>{currentFriend=friends[i];$('chatBox').style.display='block';$('chatTitle').textContent='Chat with '+currentFriend;$('chatMsgs').innerHTML=(chats[currentFriend]||[]).map(m=>`<p>${m}</p>`).join('')};
-$('addFriendBtn').onclick=()=>{let n=$('friendName').value.trim();if(!n)return;if(!friends.includes(n))friends.push(n);localStorage.setItem('tot_friends',JSON.stringify(friends));$('friendName').value='';renderFriends()};
+$('addFriendBtn').onclick=()=>{let n=$('friendName').value.trim();if(!n)return;if(!friends.includes(n))friends.push(n);localStorage.setItem('tot_friends',JSON.stringify(friends));$('friendName').value='';renderFriends();updateGuessBtn()};
 $('sendMsgBtn').onclick=()=>{if(currentFriend==null)return;let t=$('chatInput').value.trim();if(!t)return;chats[currentFriend]=chats[currentFriend]||[];chats[currentFriend].push('You: '+t);localStorage.setItem('tot_chats',JSON.stringify(chats));$('chatInput').value='';window.openChat(friends.indexOf(currentFriend))};
 function renderFeed(){let total=Object.keys(myPicks).length;$('feedBox').innerHTML=`<p>Picks made: ${total}</p><p>No picks revealed here.</p>`}
 renderSurvey();
