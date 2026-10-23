@@ -44,13 +44,21 @@ input{width:100%;padding:12px;border-radius:12px;border:2px solid #e8c9a0;font-s
 .revealstage{text-align:center;animation:bounceIn .6s}
 .revealstage.dim{filter:brightness(.95)}
 @keyframes spotlight{0%{transform:scale(.8);opacity:.3}100%{transform:scale(1);opacity:1}}
+
+body{background-image:url('img/brand-background.webp');background-size:cover;background-attachment:fixed;background-color:#fff8ef}
+.card{background:rgba(255,253,246,.92);border:3px solid #e8c9a0;border-radius:22px;box-shadow:0 6px 18px rgba(0,0,0,.12)}
+.btnbox{background:rgba(255,255,255,.85);border:2px solid #e8c9a0;border-radius:18px;padding:10px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap;box-shadow:0 4px 12px rgba(0,0,0,.08)}
+button{border-radius:999px;border:3px solid #e8c9a0;background:#ffe9c9;box-shadow:0 3px 0 #d9a86a;padding:10px 18px}
+button:active{transform:translateY(2px);box-shadow:0 1px 0 #d9a86a}
+button.sec{background:#fff}
+.opt{border:3px solid #e8c9a0;border-radius:20px;box-shadow:0 5px 14px rgba(0,0,0,.1);overflow:hidden}
 </style></head><body>
 <header><img src="logo.webp" alt="" style="height:64px"></header>
 <div class="wrap">
 <div class="card" id="authCard">
-<div class="row" style="justify-content:center"><button id="googleBtn">Google</button><button class="sec" id="guestBtn">Guest</button></div>
+<div class="row btnbox" style="justify-content:center"><button id="googleBtn">Google</button><button class="sec" id="guestBtn">Guest</button></div>
 <div class="row"><input id="nameInput"><input id="roomInput"></div>
-<div class="row" style="margin-top:8px"><button id="joinBtn">Join</button><button class="sec" id="shareBtn">🔗</button><button class="sec" id="nudgeBtn">🔔</button></div>
+<div class="row btnbox" style="margin-top:8px"><button id="joinBtn">Join</button><button class="sec" id="shareBtn">🔗</button><button class="sec" id="nudgeBtn">🔔</button></div>
 <p class="small" id="roomInfo"></p>
 </div>
 
@@ -63,12 +71,12 @@ input{width:100%;padding:12px;border-radius:12px;border:2px solid #e8c9a0;font-s
 
 <div class="card" id="gameCard">
 <div class="row" style="justify-content:space-between"><span id="roundLabel">Round 1</span><span id="turnLabel"></span></div>
-<div class="scene" id="sceneBox">🏠</div>
+<img id="catLogo" src="img/brand-logo-cozy.webp" style="width:56px;height:56px;border-radius:50%;margin:0 auto;display:block"><div class="scene" id="sceneBox">🏠</div>
 <div class="pair" id="pairBox"></div>
 <div class="target" id="targetBox">🛒</div>
 <div class="row" style="justify-content:center"><button id="confirmBtn" disabled>✓</button></div>
 <div id="revealBox" class="hidden"></div>
-<div class="row" style="margin-top:12px"><button class="sec" id="soundBtn">🔊</button><button class="sec" id="bracketBtn">🏆</button></div>
+<div class="row btnbox" style="margin-top:12px"><button class="sec" id="soundBtn">🔊</button><button class="sec" id="bracketBtn">🏆</button></div>
 <div id="bracketBox" class="hidden"></div>
 </div>
 
@@ -139,7 +147,7 @@ const SCENES={cozy:{cls:'scene-cozy',bg:'🏠 🛋️ 🔥',target:'🧺',hint:'
 function render(){
 let m=currentMatchup();if(!m)return;
 pendingPick=null;$('confirmBtn').disabled=true;
-let sc=SCENES[m.bucket]||SCENES.cozy;let sb=$('sceneBox');sb.className='scene '+sc.cls;sb.textContent=sc.bg;$('targetBox').textContent=sc.target;$('dragHint').textContent=sc.hint;
+let sc=SCENES[m.bucket]||SCENES.cozy;let sb=$('sceneBox');sb.className='scene '+sc.cls;sb.textContent=sc.bg;$\('targetBox').textContent=sc.target;let cl=$('catLogo');if(cl)cl.src='img/brand-logo-'+(m.bucket||'cozy')+'.webp';$('dragHint').textContent=sc.hint;
 $('roundLabel').textContent=phase==='pairs'?('Round 1 • Pair '+(currentIdx+1)+' / '+PAIRS.length):'🏆 • '+(bracketQueue.length)+' left';
 $('turnLabel').textContent=myPicks[m.id]?'✓ You picked — waiting for partner':'Your turn';
 let box=$('pairBox');box.innerHTML='';
