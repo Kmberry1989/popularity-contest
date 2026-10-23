@@ -45,22 +45,20 @@ input{width:100%;padding:12px;border-radius:12px;border:2px solid #e8c9a0;font-s
 .revealstage.dim{filter:brightness(.95)}
 @keyframes spotlight{0%{transform:scale(.8);opacity:.3}100%{transform:scale(1);opacity:1}}
 </style></head><body>
-<header><h1>🐵 Popularity Contest</h1><div class="sub">Clay Craft • public • anyone with a link can play</div></header>
+<header><img src="logo.webp" alt="" style="height:64px"></header>
 <div class="wrap">
 <div class="card" id="authCard">
-<img class="avatar" id="avatarImg" src="monkey-clay.webp" alt="Clay monkey avatar">
-<div class="row" style="justify-content:center"><button id="googleBtn">Sign in with Google</button><button class="sec" id="guestBtn">Play as guest</button></div>
-<p class="small" id="authMsg">Sign in to save stats on Firebase. Guest works too, on this device.</p>
-<div class="row"><input id="nameInput" placeholder="Your name"><input id="roomInput" placeholder="Room code (leave blank to create)"></div>
-<div class="row" style="margin-top:8px"><button id="joinBtn">Create / Join room</button><button class="sec" id="shareBtn">🔗 Share link</button><button class="sec" id="nudgeBtn">🔔 Nudge partner</button></div>
+<div class="row" style="justify-content:center"><button id="googleBtn">Google</button><button class="sec" id="guestBtn">Guest</button></div>
+<div class="row"><input id="nameInput"><input id="roomInput"></div>
+<div class="row" style="margin-top:8px"><button id="joinBtn">Join</button><button class="sec" id="shareBtn">🔗</button><button class="sec" id="nudgeBtn">🔔</button></div>
 <p class="small" id="roomInfo"></p>
 </div>
 
 <div class="card"><div class="row" style="justify-content:space-between"><span>❤️ Similarity <b id="simPct">—</b></span><span>🔥 Streak <b id="streakN">0</b></span><span>⭐ Level <b id="levelN">1</b></span></div>
 <div class="meter"><div id="simBar" style="width:0%"></div></div>
-<div class="row" style="justify-content:center"><span id="youAvatar" style="font-size:42px">🐵</span><span id="heartIcon" style="font-size:28px">🤍</span><span id="themAvatar" style="font-size:42px">❓</span></div>
+<div class="row" style="justify-content:center"><img id="youAvatar" src="monkey-clay.webp" alt="" style="width:42px;height:42px;border-radius:50%"><span id="heartIcon" style="font-size:28px">🤍</span><span id="themAvatar" style="font-size:42px">❓</span></div>
 <div id="badges"></div>
-<p class="small" id="statusLine">Create or join a room to start.</p>
+<p class="small" id="statusLine"></p>
 </div>
 
 <div class="card" id="gameCard">
@@ -68,24 +66,21 @@ input{width:100%;padding:12px;border-radius:12px;border:2px solid #e8c9a0;font-s
 <div class="scene" id="sceneBox">🏠</div>
 <div class="pair" id="pairBox"></div>
 <div class="target" id="targetBox">🛒</div>
-<p class="small" id="dragHint" style="text-align:center">Drag your pick to the target below, then confirm.</p>
-<div class="row" style="justify-content:center"><button id="confirmBtn" disabled>✓ Confirm pick</button></div>
+<div class="row" style="justify-content:center"><button id="confirmBtn" disabled>✓</button></div>
 <div id="revealBox" class="hidden"></div>
-<div class="row" style="margin-top:12px"><button class="sec" id="soundBtn">🔊 Sound on</button><button class="sec" id="bracketBtn">🏆 Bracket</button></div>
+<div class="row" style="margin-top:12px"><button class="sec" id="soundBtn">🔊</button><button class="sec" id="bracketBtn">🏆</button></div>
 <div id="bracketBox" class="hidden"></div>
 </div>
 
-<div class="card"><h2 style="margin:0">👥 Friends</h2><p class="small">Tap a friend to message them. No picks are shown here, ever.</p><div id="friendsList"></div><div class="row"><input id="friendName" placeholder="Friend name"><button id="addFriendBtn">Add friend</button></div><div id="chatBox" class="hidden"><h3 id="chatTitle" style="margin:8px 0"></h3><div id="chatMsgs" style="max-height:180px;overflow:auto"></div><div class="row"><input id="chatInput" placeholder="Message…"><button id="sendMsgBtn">Send</button></div><div class="row"><button class="sec" onclick="quickMsg('❤️')">❤️</button><button class="sec" onclick="quickMsg('😂')">😂</button><button class="sec" onclick="quickMsg('👍')">👍</button><button class="sec" onclick="quickMsg('Your turn!')">Your turn!</button></div></div></div>
+<div class="card"><h2 style="margin:0">👥</h2><div id="friendsList"></div><div class="row"><input id="friendName"><button id="addFriendBtn">+</button></div><div id="chatBox" class="hidden"><h3 id="chatTitle" style="margin:8px 0"></h3><div id="chatMsgs" style="max-height:180px;overflow:auto"></div><div class="row"><input id="chatInput"><button id="sendMsgBtn">➤</button></div><div class="row"><button class="sec" onclick="quickMsg('❤️')">❤️</button><button class="sec" onclick="quickMsg('😂')">😂</button><button class="sec" onclick="quickMsg('👍')">👍</button><button class="sec" onclick="quickMsg('➤')">➤</button></div></div></div>
 
-<div class="card"><h2 style="margin:0">📰 Newsfeed</h2><p class="small">Stats and comparisons only — no selections spoiled.</p><div id="feedBox"></div></div>
+<div class="card"><h2 style="margin:0">📰</h2><div id="feedBox"></div></div>
 
-<div class="card hidden" id="slotCard"><h2 style="margin:0">🎰 Bonus round</h2><div class="slot" id="slotReels">❤️ ⭐ 🐵</div><button id="spinBtn">Spin</button><p id="slotMsg"></p></div>
+<div class="card hidden" id="slotCard"><h2 style="margin:0">🎰</h2><div class="slot" id="slotReels">❤️ ⭐ 🐵</div><button id="spinBtn">Spin</button><p id="slotMsg"></p></div>
 
-<div class="card hidden" id="capsuleCard"><h2 style="margin:0">🪙 Capsule machine</h2><p class="small">Drag the coin to the slot, then turn the lever.</p>
-<div class="row" style="justify-content:space-between"><div class="coin" id="coin">🪙</div><div style="font-size:40px" id="slotTarget">🕳️</div><button id="leverBtn">🎰 Turn lever</button></div>
+<div class="card hidden" id="capsuleCard"><h2 style="margin:0">🪙</h2><div class="row" style="justify-content:space-between"><div class="coin" id="coin">🪙</div><div style="font-size:40px" id="slotTarget">🕳️</div><button id="leverBtn">🎰</button></div>
 <div id="capsuleBox">🧺</div><p id="capsuleMsg"></p></div>
 
-<p class="small">No timers, no fail states. A mismatch just shows you picked differently. Pictures are big emoji + short labels so it stays self-explanatory, with no long instructions.</p>
 </div>
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
@@ -112,9 +107,9 @@ function drumRoll(){if(!soundOn)return;let i=0;let t=setInterval(()=>{beep(120,.
 function trumpet(){[523,659,784,1047].forEach((f,i)=>setTimeout(()=>beep(f,.35,'sawtooth',.12),i*140))}
 function trombone(){[220,196,165,131].forEach((f,i)=>setTimeout(()=>beep(f,.4,'sawtooth',.12),i*180))}
 let bgmTimer=null;function startBgm(){if(bgmTimer)return;let notes=[523,587,659,784,659,587];let i=0;bgmTimer=setInterval(()=>{if(soundOn)beep(notes[i%notes.length],.35,'sine',.04);i++},420)}
-document.getElementById('soundBtn').onclick=e=>{soundOn=!soundOn;e.target.textContent=soundOn?'🔊 Sound on':'🔇 Sound off';if(soundOn)startBgm()};
+document.getElementById('soundBtn').onclick=e=>{soundOn=!soundOn;e.target.textContent=soundOn?'🔊':'🔇 Sound off';if(soundOn)startBgm()};
 const $=id=>document.getElementById(id);
-function avatarReact(kind){const a=$('avatarImg');a.className='avatar '+kind;setTimeout(()=>a.className='avatar',900)}
+function avatarReact(kind){const a=$('youAvatar');a.style.transform='scale(1.2)';setTimeout(()=>a.style.transform='',900)}
 function updateStreak(){let today=new Date().toDateString(),last=localStorage.getItem('tot_last'),s=parseInt(localStorage.getItem('tot_streak')||'0');if(last!==today){let y=new Date(Date.now()-86400000).toDateString();streak=(last===y)?s+1:1;localStorage.setItem('tot_last',today);localStorage.setItem('tot_streak',streak);}else streak=s||1;$('streakN').textContent=streak}
 function addXp(n){xp+=n;let nl=1+Math.floor(xp/50);if(nl>level){level=nl;$('levelN').textContent=level;showCapsule();sfx('win')} }
 function unlockBadge(name){if(!badgesList.includes(name)){badgesList.push(name);$('badges').innerHTML=badgesList.map(b=>`<span class="badge">${b}</span>`).join('')}}
@@ -124,22 +119,22 @@ $('googleBtn').onclick=async()=>{if(!auth)return alert('Firebase not ready, use 
 $('guestBtn').onclick=async()=>{if(auth){try{await signInAnonymously(auth)}catch(e){}}user=user||{uid:'guest-'+Math.random().toString(36).slice(2)};$('authMsg').textContent='Playing as guest';startBgm();sfx('tap')};
 // --- rooms: public, anyone with link can join ---
 function roomRef(){return doc(db,'thisorthat_public',roomId)}
-async function syncRoom(){if(!db||!roomId)return;onSnapshot(roomRef(),snap=>{if(!snap.exists())return;room=snap.data();let me=room.players?.find(p=>p.uid===(user?.uid||'guest'));let other=room.players?.find(p=>p.uid!==(user?.uid||'guest'));myPicks=room.picks?.[user?.uid||'guest']||{};partnerPicks=other?room.picks?.[other.uid]||{}:{};$('themAvatar').textContent=other?'🐻':'❓';$('roomInfo').textContent='Room '+roomId+' • Players: '+(room.players?.length||0)+' • Share this link with anyone, by word of mouth.';render();updateSimilarity();});}
-$('joinBtn').onclick=async()=>{let name=$('nameInput').value.trim()||'Player';roomId=$('roomInput').value.trim()||('room-'+Math.random().toString(36).slice(2,7));let uid=user?.uid||('guest-'+Math.random().toString(36).slice(2));if(!db){$('roomInfo').textContent='Room '+roomId+' (local mode — Firebase not connected, play pass-and-play here)';render();return;}
+async function syncRoom(){if(!db||!roomId)return;onSnapshot(roomRef(),snap=>{if(!snap.exists())return;room=snap.data();let me=room.players?.find(p=>p.uid===(user?.uid||'guest'));let other=room.players?.find(p=>p.uid!==(user?.uid||'guest'));myPicks=room.picks?.[user?.uid||'guest']||{};partnerPicks=other?room.picks?.[other.uid]||{}:{};$('themAvatar').textContent=other?'🐻':'❓';$('roomInfo').textContent=roomId;render();updateSimilarity();});}
+$('joinBtn').onclick=async()=>{let name=$('nameInput').value.trim()||'Player';roomId=$('roomInput').value.trim()||('room-'+Math.random().toString(36).slice(2,7));let uid=user?.uid||('guest-'+Math.random().toString(36).slice(2));if(!db){$('roomInfo').textContent=roomId;render();return;}
 let ref=roomRef(),snap=await getDoc(ref);let players=snap.exists()?snap.data().players||[]:[];if(!players.find(p=>p.uid===uid))players.push({uid,name,animal:'🐵'});if(snap.exists()){await updateDoc(ref,{players})}else{await setDoc(ref,{players,picks:{},createdAt:Date.now()})}
-history.replaceState(null,'','?room='+roomId);$('roomInfo').textContent='Room '+roomId+' • Share this link with anyone.';updateStreak();syncRoom();sfx('match')};
+history.replaceState(null,'','?room='+roomId);$('roomInfo').textContent=roomId;updateStreak();syncRoom();sfx('match')};
 if(roomId){$('roomInput').value=roomId}
 // --- game: round 1 pairs, then bracket ---
 let currentIdx=0, bracketQueue=[], phase='pairs';
 function currentMatchup(){if(phase==='pairs')return {id:'p'+currentIdx,a:PAIRS[currentIdx][0],b:PAIRS[currentIdx][1],ea:PAIRS[currentIdx][2],eb:PAIRS[currentIdx][3],bucket:PAIRS[currentIdx][4]};
 let m=bracketQueue[0];return m}
 let pendingPick=null;let revealedId=null;
-const SCENES={cozy:{cls:'scene-cozy',bg:'🏠 🛋️ 🔥',target:'🧺',hint:'Drag your pick to the cozy basket, then confirm.'},food:{cls:'scene-food',bg:'🛒 🥦 🍞 🧃 — first-person grocery store, shelves ahead, cart in front',target:'🛒',hint:'Drag your pick to the shopping cart in front of you, then confirm.'},seasons:{cls:'scene-seasons',bg:'🌳 🌤️ 🍂',target:'🎒',hint:'Drag your pick to the backpack, then confirm.'},animals:{cls:'scene-animals',bg:'🐾 🌲 🦁',target:'🏠',hint:'Drag your pick to the pet carrier, then confirm.'},color:{cls:'scene-food',bg:'🎨 🌈 🖌️ — color studio',target:'🎨',hint:'Drag your pick to the paint palette, then confirm.'},bracket:{cls:'scene-bracket',bg:'🏆 ✨',target:'🏆',hint:'Drag your pick to the trophy, then confirm.'}};
+const SCENES={cozy:{cls:'scene-cozy',bg:'🏠 🛋️ 🔥',target:'🧺',hint:''},food:{cls:'scene-food',bg:'🛒 🥦 🍞 🧃',target:'🛒',hint:''},seasons:{cls:'scene-seasons',bg:'🌳 🌤️ 🍂',target:'🎒',hint:''},animals:{cls:'scene-animals',bg:'🐾 🌲 🦁',target:'🏠',hint:''},color:{cls:'scene-food',bg:'🎨 🌈 🖌️',target:'🎨',hint:''},bracket:{cls:'scene-bracket',bg:'🏆 ✨',target:'🏆',hint:''}};
 function render(){
 let m=currentMatchup();if(!m)return;
 pendingPick=null;$('confirmBtn').disabled=true;
 let sc=SCENES[m.bucket]||SCENES.cozy;let sb=$('sceneBox');sb.className='scene '+sc.cls;sb.textContent=sc.bg;$('targetBox').textContent=sc.target;$('dragHint').textContent=sc.hint;
-$('roundLabel').textContent=phase==='pairs'?('Round 1 • Pair '+(currentIdx+1)+' / '+PAIRS.length):'🏆 Bracket • '+(bracketQueue.length)+' left';
+$('roundLabel').textContent=phase==='pairs'?('Round 1 • Pair '+(currentIdx+1)+' / '+PAIRS.length):'🏆 • '+(bracketQueue.length)+' left';
 $('turnLabel').textContent=myPicks[m.id]?'✓ You picked — waiting for partner':'Your turn';
 let box=$('pairBox');box.innerHTML='';
 [[m.a,m.ea,0],[m.b,m.eb,1]].forEach(([label,emoji,side])=>{let d=document.createElement('div');d.className='opt glow'+(myPicks[m.id]===label?' picked':'');d.innerHTML=`<span class="emoji">${emoji}</span><b>${label}</b>`;d.style.touchAction='none';
@@ -187,18 +182,18 @@ function showSlot(){$('slotCard').classList.remove('hidden');}
 $('spinBtn').onclick=()=>{let sym=['❤️','⭐','🐵','🍀','🎵'];let r=()=>sym[Math.floor(Math.random()*sym.length)];let reels=[r(),r(),r()];$('slotReels').textContent=reels.join(' ');sfx('pop');let win=reels[0]===reels[1]||reels[1]===reels[2];$('slotMsg').textContent=win?'Bonus! +20 XP, capsule coin earned.':'Nice spin! +5 XP';addXp(win?20:5);if(win)showCapsule()};
 function showCapsule(){$('capsuleCard').classList.remove('hidden')}
 let coinPlaced=false;
-$('coin').onpointerdown=e=>{coinPlaced=true;$('capsuleMsg').textContent='Coin in slot! Now turn the lever.';sfx('tap')};
-$('leverBtn').onclick=()=>{if(!coinPlaced){$('capsuleMsg').textContent='Drag the coin to the slot first.';return}$('capsuleBox').classList.add('rumble');sfx('pop');setTimeout(()=>{$('capsuleBox').classList.remove('rumble');$('capsuleBox').textContent='🥚';$('capsuleMsg').innerHTML='Capsule out! Tap it to open. <button id="openCap">Open</button>';$('openCap').onclick=()=>{let prizes=['🧣 Scarf','🎩 Hat','🌸 Flower','👑 Crown','🕶️ Glasses','🎀 Bow'];let p=prizes[Math.floor(Math.random()*prizes.length)];$('capsuleMsg').textContent='You got: '+p+' — it is now on your avatar!';unlockBadge('Capsule: '+p);sfx('win');avatarReact('celebrate');}},800)};
-$('bracketBtn').onclick=()=>{let b=$('bracketBox');b.classList.toggle('hidden');b.innerHTML='<p class="small">Bracket: winners from Round 1 face off, bucket by bucket, then the 4 bucket champions face off. Your current bracket queue: '+(bracketQueue.length||'— play Round 1 first')+'</p>'};
+$('coin').onpointerdown=e=>{coinPlaced=true;$('capsuleMsg').textContent='🪙';sfx('tap')};
+$('leverBtn').onclick=()=>{if(!coinPlaced){$('capsuleMsg').textContent='🪙';return}$('capsuleBox').classList.add('rumble');sfx('pop');setTimeout(()=>{$('capsuleBox').classList.remove('rumble');$('capsuleBox').textContent='🥚';$('capsuleMsg').innerHTML='Capsule out! Tap it to open. <button id="openCap">Open</button>';$('openCap').onclick=()=>{let prizes=['🧣 Scarf','🎩 Hat','🌸 Flower','👑 Crown','🕶️ Glasses','🎀 Bow'];let p=prizes[Math.floor(Math.random()*prizes.length)];$('capsuleMsg').textContent=p;unlockBadge('Capsule: '+p);sfx('win');avatarReact('celebrate');}},800)};
+$('bracketBtn').onclick=()=>{let b=$('bracketBox');b.classList.toggle('hidden');b.innerHTML='<p>'+(bracketQueue.length||'🏆')+'</p>'};
 async function shareLink(){let url=location.href.split('?')[0]+(roomId?'?room='+roomId:'');let text='Your turn in Popularity Contest!';if(navigator.share){try{await navigator.share({title: "Popularity Contest",text,url});return}catch(e){}}
 try{await navigator.clipboard.writeText(text+' '+url);alert('Link copied — paste it into Messages.')}catch(e){location.href='sms:?body='+encodeURIComponent(text+' '+url)}}
 $('shareBtn').onclick=shareLink;$('nudgeBtn').onclick=shareLink;
 // --- friends, messaging, spoiler-free newsfeed ---
 let friends=JSON.parse(localStorage.getItem('tot_friends')||'[]');let chats=JSON.parse(localStorage.getItem('tot_chats')||'{}');let currentFriend=null;
 function saveFriends(){localStorage.setItem('tot_friends',JSON.stringify(friends));localStorage.setItem('tot_chats',JSON.stringify(chats));renderFriends();renderFeed();}
-function renderFriends(){let el=$('friendsList');if(!friends.length){el.innerHTML='<p class="small">No friends yet — join a room, then add your partner here.</p>';return}el.innerHTML=friends.map((f,i)=>`<button class="sec" onclick="openChat(${i})">👤 ${f}</button>`).join(' ')}
+function renderFriends(){let el=$('friendsList');if(!friends.length){el.innerHTML='';return}el.innerHTML=friends.map((f,i)=>`<button class="sec" onclick="openChat(${i})">👤 ${f}</button>`).join(' ')}
 window.openChat=i=>{currentFriend=friends[i];$('chatBox').classList.remove('hidden');$('chatTitle').textContent='Chat with '+currentFriend;renderChat()};
-function renderChat(){if(currentFriend==null)return;$('chatMsgs').innerHTML=(chats[currentFriend]||[]).map(m=>`<p>${m}</p>`).join('')||'<p class="small">Say hi — no picks are shared automatically.</p>'}
+function renderChat(){if(currentFriend==null)return;$('chatMsgs').innerHTML=(chats[currentFriend]||[]).map(m=>`<p>${m}</p>`).join('')||''}
 function sendChat(text){if(currentFriend==null||!text)return;chats[currentFriend]=chats[currentFriend]||[];chats[currentFriend].push('You: '+text);saveFriends();renderChat();$('chatInput').value=''}
 $('addFriendBtn').onclick=()=>{let n=$('friendName').value.trim();if(!n)return;if(!friends.includes(n))friends.push(n);$('friendName').value='';saveFriends();sfx('match')};
 $('sendMsgBtn').onclick=()=>sendChat($('chatInput').value.trim());window.quickMsg=t=>sendChat(t);
@@ -208,7 +203,7 @@ let items=[];
 items.push(`📊 You have made ${total} picks • Level ${level} • Streak ${streak} days`);
 if(shared)items.push(`💞 Similarity with your partner: ${same}% over ${shared} shared matchups — no picks revealed here`);
 if(badgesList.length)items.push(`🏅 Badges unlocked: ${badgesList.length} — ${badgesList.join(', ')}`);
-items.push(`👥 Friends: ${friends.length} • Rooms are public — anyone with a link can join a new pair`);
+items.push(`👥 Friends: ${friends.length}`);
 $('feedBox').innerHTML=items.map(i=>`<p>${i}</p>`).join('')}
 // hook feed into existing updates
 let _origRender=render;render=function(){_origRender();renderFriends();renderFeed()};
