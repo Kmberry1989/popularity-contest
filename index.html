@@ -36,6 +36,14 @@ input{width:100%;padding:12px;border-radius:12px;border:2px solid #e8c9a0;font-s
 .target.over{border-style:solid;background:#ffe9c9;animation:pulseGlow 1s infinite}
 .opt.glow{animation:pulseGlow 1.6s infinite}
 .opt.dragging{position:relative;z-index:10;transform:scale(1.1);box-shadow:0 10px 20px rgba(0,0,0,.2)}
+.flipscene{display:grid;grid-template-columns:1fr 1fr;gap:12px;perspective:800px}
+.flip{position:relative;height:140px;transform-style:preserve-3d;transition:transform .8s cubic-bezier(.2,.8,.2,1)}
+.flip.flipped{transform:rotateY(180deg)}
+.flip>div{position:absolute;inset:0;border-radius:18px;border:3px solid #e8c9a0;background:#fffdf6;display:flex;flex-direction:column;align-items:center;justify-content:center;backface-visibility:hidden}
+.flip .back{transform:rotateY(180deg);background:#ffe9c9}
+.revealstage{text-align:center;animation:bounceIn .6s}
+.revealstage.dim{filter:brightness(.95)}
+@keyframes spotlight{0%{transform:scale(.8);opacity:.3}100%{transform:scale(1);opacity:1}}
 </style></head><body>
 <header><h1>🐵 Popularity Contest</h1><div class="sub">Clay Craft • public • anyone with a link can play</div></header>
 <div class="wrap">
@@ -100,6 +108,9 @@ let roomId=new URLSearchParams(location.search).get('room')||'', room=null, myPi
 let soundOn=true, ctx=null;
 function beep(f=600,d=.12,type='sine',g=.15){if(!soundOn)return;try{ctx=ctx||new (window.AudioContext||window.webkitAudioContext)();let o=ctx.createOscillator(),gn=ctx.createGain();o.type=type;o.frequency.value=f;gn.gain.setValueAtTime(g,ctx.currentTime);gn.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+d);o.connect(gn);gn.connect(ctx.destination);o.start();o.stop(ctx.currentTime+d);}catch(e){}}
 function sfx(n){if(n=='tap')beep(500,.08);if(n=='match'){beep(660,.15);setTimeout(()=>beep(880,.2),90)}if(n=='soft')beep(300,.2,'sine',.08);if(n=='win'){[523,659,784].forEach((f,i)=>setTimeout(()=>beep(f,.25),i*110))}if(n=='pop')beep(900,.1,'triangle')}
+function drumRoll(){if(!soundOn)return;let i=0;let t=setInterval(()=>{beep(120,.06,'square',.12);i++;if(i>14)clearInterval(t)},110)}
+function trumpet(){[523,659,784,1047].forEach((f,i)=>setTimeout(()=>beep(f,.35,'sawtooth',.12),i*140))}
+function trombone(){[220,196,165,131].forEach((f,i)=>setTimeout(()=>beep(f,.4,'sawtooth',.12),i*180))}
 let bgmTimer=null;function startBgm(){if(bgmTimer)return;let notes=[523,587,659,784,659,587];let i=0;bgmTimer=setInterval(()=>{if(soundOn)beep(notes[i%notes.length],.35,'sine',.04);i++},420)}
 document.getElementById('soundBtn').onclick=e=>{soundOn=!soundOn;e.target.textContent=soundOn?'🔊 Sound on':'🔇 Sound off';if(soundOn)startBgm()};
 const $=id=>document.getElementById(id);
@@ -122,7 +133,7 @@ if(roomId){$('roomInput').value=roomId}
 let currentIdx=0, bracketQueue=[], phase='pairs';
 function currentMatchup(){if(phase==='pairs')return {id:'p'+currentIdx,a:PAIRS[currentIdx][0],b:PAIRS[currentIdx][1],ea:PAIRS[currentIdx][2],eb:PAIRS[currentIdx][3],bucket:PAIRS[currentIdx][4]};
 let m=bracketQueue[0];return m}
-let pendingPick=null;
+let pendingPick=null;let revealedId=null;
 const SCENES={cozy:{cls:'scene-cozy',bg:'🏠 🛋️ 🔥',target:'🧺',hint:'Drag your pick to the cozy basket, then confirm.'},food:{cls:'scene-food',bg:'🛒 🥦 🍞 🧃 — first-person grocery store, shelves ahead, cart in front',target:'🛒',hint:'Drag your pick to the shopping cart in front of you, then confirm.'},seasons:{cls:'scene-seasons',bg:'🌳 🌤️ 🍂',target:'🎒',hint:'Drag your pick to the backpack, then confirm.'},animals:{cls:'scene-animals',bg:'🐾 🌲 🦁',target:'🏠',hint:'Drag your pick to the pet carrier, then confirm.'},color:{cls:'scene-food',bg:'🎨 🌈 🖌️ — color studio',target:'🎨',hint:'Drag your pick to the paint palette, then confirm.'},bracket:{cls:'scene-bracket',bg:'🏆 ✨',target:'🏆',hint:'Drag your pick to the trophy, then confirm.'}};
 function render(){
 let m=currentMatchup();if(!m)return;
@@ -140,7 +151,16 @@ d.addEventListener('pointerup',e=>{if(!dragging)return;dragging=false;d.classLis
 box.appendChild(d)});
 $('confirmBtn').onclick=()=>{if(pendingPick)pick(pendingPick,m)};
 let rev=$('revealBox');
-if(myPicks[m.id]&&partnerPicks[m.id]){rev.classList.remove('hidden');let match=myPicks[m.id]===partnerPicks[m.id];rev.innerHTML=`<p>${match?'💖 Match!':'💛 Different picks'} — You: ${myPicks[m.id]} • Them: ${partnerPicks[m.id]}</p><button id="nextBtn">Next →</button>`;rev.querySelector('#nextBtn').onclick=nextMatchup;if(match)avatarReact('happy');else avatarReact('sad');}
+if(myPicks[m.id]&&partnerPicks[m.id]){rev.classList.remove('hidden');let match=myPicks[m.id]===partnerPicks[m.id];let youEmoji=m.ea, themEmoji=m.eb;
+if(revealedId===m.id){rev.innerHTML=`<p>${match?'💖 Match!':'💛 Different picks'} — You: ${myPicks[m.id]} • Them: ${partnerPicks[m.id]}</p><button id="nextBtn">Next →</button>`;rev.querySelector('#nextBtn').onclick=nextMatchup;}
+else{revealedId=m.id;
+if(myPicks[m.id]===m.b){youEmoji=m.eb} if(partnerPicks[m.id]===m.b){themEmoji=m.eb} if(partnerPicks[m.id]===m.a){themEmoji=m.ea}
+rev.innerHTML=`<div class="revealstage"><p style="font-size:28px">🥁 Drum roll…</p><div class="flipscene"><div class="flip" id="flipYou"><div><span style="font-size:48px">❓</span><b>You</b></div><div class="back"><span style="font-size:48px">${youEmoji}</span><b>${myPicks[m.id]}</b></div></div><div class="flip" id="flipThem"><div><span style="font-size:48px">❓</span><b>Them</b></div><div class="back"><span style="font-size:48px">${themEmoji}</span><b>${partnerPicks[m.id]}</b></div></div></div><p id="revealResult" style="font-size:20px">…</p><button id="nextBtn" class="hidden">Next →</button></div>`;
+drumRoll();
+setTimeout(()=>{document.getElementById('flipYou').classList.add('flipped')},600);
+setTimeout(()=>{document.getElementById('flipThem').classList.add('flipped')},1100);
+setTimeout(()=>{let r=$('revealResult');if(match){r.textContent='💖 Match! Trumpet!';trumpet();avatarReact('celebrate')}else{r.textContent='💛 Different picks — low trombone';trombone();avatarReact('sad')}$('nextBtn').classList.remove('hidden')},1700);
+rev.querySelector('#nextBtn').onclick=nextMatchup;}}
 else rev.classList.add('hidden');
 }
 async function pick(label,m){
