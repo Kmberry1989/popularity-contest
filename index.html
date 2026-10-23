@@ -58,7 +58,7 @@ input{width:100%;padding:12px;border-radius:12px;border:2px solid #e8c9a0;font-s
 <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px">
 <img src="title.png" alt="" style="width:100%;max-width:480px;display:block">
 <button class="playgraphic" id="playBtn"><img src="img/brand-play-button.png" alt=""></button>
-<button class="small" id="moreBtn">More</button><button class="small" id="guessBtn">Guess</button>
+<button class="small" id="guessBtn">Guess</button>
 </div></div>
 
 <div class="screen" id="pairScreen">
@@ -76,14 +76,14 @@ input{width:100%;padding:12px;border-radius:12px;border:2px solid #e8c9a0;font-s
 <div id="waitingDetail" style="font-size:17px"></div>
 <button id="nudgeBtn">Nudge</button>
 <button class="small" id="checkBtn">Check again</button>
-<button class="small" id="waitMenuBtn">Menu</button>
+<button class="small" id="waitMenuBtn">Menu</button><button class="small" id="moreBtn3">⋯</button>
 </div></div>
 
 <div class="screen" id="revealScreen">
 <div style="font-size:22px;font-weight:800;text-align:center;padding:8px">Reveal</div>
 <div class="scroll" id="revealList"></div>
 <button class="big" id="nextRunBtn">Next 5</button>
-<button class="small" id="revealMenuBtn">Menu</button>
+<button class="small" id="revealMenuBtn">Menu</button><button class="small" id="moreBtn2">⋯</button>
 </div>
 
 <div class="screen" id="guessDoneScreen">
@@ -148,7 +148,7 @@ async function finishRun(){let pairs=runPairs();let done=pairs.every(p=>myPicks[
 function checkReveal(){if(document.getElementById('waitingScreen').classList.contains('active')){let pairs=runPairs();if(pairs.every(p=>myPicks[p.id]&&partnerPicks[p.id]))showReveal()}}
 function showReveal(){show('revealScreen');let pairs=runPairs();$('revealList').innerHTML='';drumRoll();pairs.forEach((p,i)=>{let you=myPicks[p.id],them=partnerPicks[p.id];let match=you===them;let row=document.createElement('div');row.className='revealrow';row.innerHTML=`<div class="revealcard"><img src="${IMG[you]||''}"><div>You: ${you}</div></div><div class="revealcard"><img src="${IMG[them]||''}"><div>Them: ${them}</div></div>`;$('revealList').appendChild(row);setTimeout(()=>{if(match)trumpet();else trombone()},1200+i*600)})}
 $('playBtn').onclick=async()=>{guessMode=false;startBgm();await ensureRoom();syncRoom();runIdx=0;show('pairScreen');renderPair()};
-$('moreBtn').onclick=()=>{show('moreScreen');renderSurvey();renderFriends();renderFeed()};
+let showMore=()=>{show('moreScreen');renderSurvey();renderFriends();renderFeed()};if($('moreBtn'))$('moreBtn').onclick=showMore;$('moreBtn2').onclick=showMore;$('moreBtn3').onclick=showMore;
 $('moreBackBtn').onclick=()=>show('menuScreen');
 $('waitMenuBtn').onclick=()=>show('menuScreen');
 $('revealMenuBtn').onclick=()=>show('menuScreen');
