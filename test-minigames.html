@@ -191,7 +191,7 @@ async function testAll(){
   });
   // scramble: find word matching scrambled letters
   await runOne('scramble', async()=>{
-    let txt=document.querySelector('#miniPlay').textContent;
+    let txt=document.querySelector('#miniPlay > div').textContent;
     let m=txt.match(/Unscramble:\s*([A-Z ]+)/);
     let scr=(m[1].replace(/ /g,'')).split('');
     let cand=null;
