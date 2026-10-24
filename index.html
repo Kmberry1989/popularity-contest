@@ -54,15 +54,12 @@ input{width:100%;padding:12px;border-radius:12px;border:2px solid #e8c9a0;font-s
 #pairScreen.guessmode #guessBanner{display:block}
 #guessBtn{display:none}
 
-.titlewarp{animation:warp 3.2s ease-in-out infinite;transform-origin:center}
-@keyframes warp{0%,100%{transform:scale(1) skewX(0deg)}25%{transform:scale(1.07) skewX(-2deg)}50%{transform:scale(.96) skewX(2deg)}75%{transform:scale(1.04) skewX(-1deg)}}
-.spotlight{position:fixed;top:-20%;width:180px;height:140%;pointer-events:none;z-index:0;background:linear-gradient(180deg,rgba(255,255,255,.55),rgba(255,255,255,0) 70%);clip-path:polygon(42% 0,58% 0,100% 100%,0 100%);animation:sweep 11s ease-in-out infinite;opacity:.5}
-@keyframes sweep{0%,100%{transform:translateX(-30vw) rotate(-8deg)}50%{transform:translateX(30vw) rotate(8deg)}}
-.vignette{position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse at center,transparent 55%,rgba(59,42,30,.18) 100%)}
+50%{transform:scale(.96) skewX(2deg)}75%{transform:scale(1.04) skewX(-1deg)}}
+}
 </style></head><body>
-<div class="spotlight" style="left:20%;animation-delay:0s"></div><div class="spotlight" style="left:55%;animation-delay:3.5s;opacity:.35"></div><div class="spotlight" style="left:75%;animation-delay:7s;opacity:.3"></div><div class="vignette"></div><div class="float" style="left:8%;top:12%"></div><div class="float" style="right:10%;top:22%;animation-delay:1.5s;background:rgba(255,93,143,.25)"></div><div class="float" style="left:14%;bottom:18%;animation-delay:3s;background:rgba(76,175,80,.25)"></div><div class="float" style="right:16%;bottom:28%;animation-delay:2s"></div><div class="screen active" id="menuScreen">
+<div class="float" style="left:8%;top:12%"></div><div class="float" style="right:10%;top:22%;animation-delay:1.5s;background:rgba(255,93,143,.25)"></div><div class="float" style="left:14%;bottom:18%;animation-delay:3s;background:rgba(76,175,80,.25)"></div><div class="float" style="right:16%;bottom:28%;animation-delay:2s"></div><div class="screen active" id="menuScreen">
 <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px">
-<img src="title.png" alt="" class="titlewarp" style="width:100%;max-width:480px;display:block;position:relative;z-index:1">
+<img src="title.png" alt="" style="width:100%;max-width:480px;display:block;position:relative;z-index:1">
 <button class="playgraphic" id="playBtn"><img src="img/brand-play-button.png" alt=""></button>
 <button class="small" id="guessBtn">Guess</button>
 </div></div>
