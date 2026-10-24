@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <title>Popularity Contest</title><meta property="og:title" content="Popularity Contest"><meta property="og:type" content="website"><meta property="og:url" content="https://kmberry1989.github.io/this-or-that-game/"><meta property="og:image" content="https://kmberry1989.github.io/this-or-that-game/share.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://kmberry1989.github.io/this-or-that-game/share.jpg"><style>
-*{box-sizing:border-box}html,body{height:100dvh;overflow:hidden;margin:0;touch-action:manipulation;overscroll-behavior:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;font-family:system-ui,-apple-system,sans-serif;background:linear-gradient(180deg,#fff8ef,#ffe9c9);color:#3b2a1e}
+*{box-sizing:border-box;-webkit-touch-callout:none!important;-webkit-user-select:none!important;user-select:none!important}html,body{height:100dvh;overflow:hidden;margin:0;touch-action:manipulation;overscroll-behavior:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;font-family:system-ui,-apple-system,sans-serif;background:linear-gradient(180deg,#fff8ef,#ffe9c9);color:#3b2a1e}
 .screen{height:100dvh;width:100%;display:none!important;flex-direction:column;overflow:hidden;padding:calc(12px + env(safe-area-inset-top)) 12px calc(12px + env(safe-area-inset-bottom))}
 .screen.active{display:flex!important}
 button{border:3px solid #e8c9a0;border-radius:12px;background:#ffe9c9;color:#3b2a1e;padding:14px 22px;font-size:18px;font-weight:800;min-height:52px;cursor:pointer;box-shadow:0 3px 0 #d9a86a}
@@ -11,9 +11,9 @@ button.small{padding:8px 14px;font-size:15px;min-height:40px;background:#fff}
 input{width:100%;padding:12px;border-radius:12px;border:2px solid #e8c9a0;font-size:17px;color:#3b2a1e}
 .dots{display:flex;gap:8px;justify-content:center;padding:8px}
 .dot{width:12px;height:12px;border-radius:50%;background:#e8c9a0}.dot.on{background:#ff8a3d}
-.pairwrap{flex:1;display:flex;flex-direction:column;gap:10px;position:relative;overflow:hidden;touch-action:none}
-.opt{flex:1;border:3px solid #e8c9a0;border-radius:22px;overflow:hidden;background:#fffdf6;transition:transform .2s,opacity .2s,border-color .2s;display:flex;flex-direction:column}
-.opt img{width:100%;flex:1;object-fit:contain;min-height:0;background:#fffdf6}
+.pairwrap{flex:1;display:flex;flex-direction:column;gap:10px;position:relative;overflow:hidden;touch-action:none!important}
+.opt{flex:1;border:3px solid #e8c9a0;border-radius:22px;overflow:hidden;background:#fffdf6;transition:transform .2s,opacity .2s,border-color .2s;display:flex;flex-direction:column;touch-action:none!important;-webkit-touch-callout:none!important}
+.opt img{width:100%;flex:1;object-fit:contain;min-height:0;background:#fffdf6;-webkit-touch-callout:none!important;-webkit-user-drag:none!important;user-drag:none!important;touch-action:none!important}
 .opt b{padding:10px;text-align:center;font-size:18px}
 .opt.chosen{border-color:#ff8a3d;transform:scale(1.03);box-shadow:0 0 0 4px rgba(255,138,61,.3)}
 .opt.dim{opacity:.35;transform:scale(.96)}
@@ -188,6 +188,10 @@ $('guessBtn').onclick=()=>{let f=JSON.parse(localStorage.getItem('tot_friends')|
 $('guessDoneMenuBtn').onclick=()=>{guessMode=false;show('menuScreen')};
 function updateGuessBtn(){$('guessBtn').style.display='none'}
 updateGuessBtn();
+document.addEventListener('contextmenu',e=>e.preventDefault());
+document.addEventListener('selectstart',e=>e.preventDefault());
+document.addEventListener('dragstart',e=>e.preventDefault());
+document.querySelectorAll('img').forEach(im=>{im.draggable=false;im.addEventListener('contextmenu',e=>e.preventDefault())});
 document.addEventListener('gesturestart',e=>e.preventDefault());
 document.addEventListener('gesturechange',e=>e.preventDefault());
 document.addEventListener('gestureend',e=>e.preventDefault());
