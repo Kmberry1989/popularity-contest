@@ -121,6 +121,11 @@ input{width:100%;padding:12px;border-radius:12px;border:2px solid #e8c9a0;font-s
 <button class="small" id="waitMenuBtn">Menu</button><button class="small" id="moreBtn3">⋯</button>
 </div></div>
 
+<div class="screen" id="reflexScreen">
+<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;text-align:center;position:relative;overflow:hidden">
+<div id="reflexTarget" style="width:100px;height:100px;border-radius:50%;background:#ff5d8f;display:flex;align-items:center;justify-content:center;font-size:60px;cursor:pointer;position:absolute;left:40%;top:40%">⭐</div>
+<div id="reflexMsg" style="position:absolute;bottom:20px;font-weight:800">Tap it!</div>
+</div></div>
 <div class="screen" id="processScreen">
 <div id="spectacle" style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;text-align:center;overflow:hidden"></div>
 </div>
@@ -232,7 +237,8 @@ function endHold(){stopRumble();if(holdTimer){clearInterval(holdTimer);holdTimer
 $('optA').addEventListener('pointerdown',()=>startHold('a'));$('optB').addEventListener('pointerdown',()=>startHold('b'));
 window.addEventListener('pointerup',endHold);window.addEventListener('pointercancel',endHold);
 $('confirmBtn').onclick=async()=>{if(!preview)return;let t=document.getElementById('thumbsUp');if(t)t.remove();saveStats({picks:1});let _m=runPairs()[runIdx];if(_m)saveSeen(_m.id);let m=runPairs()[runIdx];if(!guessMode)myPicks[m.id]=preview.label;let el=preview.side==='a'?$('optA'):$('optB');el.classList.remove('glow');el.classList.add('locked');try{navigator.vibrate&&navigator.vibrate([60,40,120])}catch(e){}try{let o=ctx.createOscillator(),g=ctx.createGain();o.type='sine';o.frequency.setValueAtTime(300,ctx.currentTime);o.frequency.exponentialRampToValueAtTime(1400,ctx.currentTime+.35);g.gain.setValueAtTime(.12,ctx.currentTime);g.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+.4);o.connect(g);g.connect(ctx.destination);o.start();o.stop(ctx.currentTime+.4)}catch(e){}setTimeout(()=>beep(1320,.25,'sine'),200);if(guessMode){guessPicks[m.id]=preview.label}else if(db&&roomId){try{let ref=roomRef(),snap=await getDoc(ref);let picks=snap.data()?.picks||{};picks[user?.uid||'guest']=myPicks;await updateDoc(ref,{picks})}catch(e){}}let dir=preview.side==='b'?'slideout-right':'slideout-left';$('pairWrap').classList.add(dir);setTimeout(()=>{runIdx++;if(runIdx>=5){if(guessMode){if(guessFriend==='Partner'){showReveal()}else{showGuessDone()}}else{finishRun()}}else{renderPair()}},450)};
-async function finishRun(){show('processScreen');let variants=[
+function startReflex(){show('reflexScreen');let variants=[['⭐','Tap the star'],['🏀','Catch the ball'],['💚','Tap the green'],['🫧','Pop the bubble'],['❤️','Catch the heart']];let v=variants[Math.floor(Math.random()*variants.length)];let t=$('reflexTarget');t.textContent=v[0];document.getElementById('reflexMsg').textContent=v[1];let x=Math.random()*60+10,y=Math.random()*50+15;t.style.left=x+'%';t.style.top=y+'%';t.style.background=['#ff5d8f','#ffd93d','#4caf50','#4a90e2'][Math.floor(Math.random()*4)];beep(880,.2);t.onclick=()=>{beep(1200,.2);document.getElementById('reflexMsg').textContent='Got it!';setTimeout(()=>{let pairs=runPairs();let partnerDone=pairs.every(pr=>partnerPicks[pr.id]);if(partnerDone){show('guessPopupScreen')}else{finishedRun=true;try{startMemory()}catch(e){show('menuScreen')}}},600)};setTimeout(()=>{if(document.getElementById('reflexScreen').classList.contains('active')){let pairs=runPairs();let partnerDone=pairs.every(pr=>partnerPicks[pr.id]);if(partnerDone){show('guessPopupScreen')}else{finishedRun=true;try{startMemory()}catch(e){show('menuScreen')}}}},4000)}
+async function finishRun(){if(Math.random()<0.33){startReflex();return}show('processScreen');let variants=[
 '<div style="font-size:80px;animation:vortex 1.5s linear infinite">💫</div><div style="font-size:20px;font-weight:800">Hearts swirling</div>',
 '<div style="font-size:80px;animation:shufflefly .6s ease-in-out infinite">🃏</div><div style="font-size:20px;font-weight:800">Cards flying</div>',
 '<div style="font-size:80px">🎆</div><div style="font-size:20px;font-weight:800">Fireworks saving</div>',
