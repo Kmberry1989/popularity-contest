@@ -417,7 +417,8 @@ $('addFriendBtn').onclick=()=>{let n=$('friendName').value.trim();if(!n)return;i
 $('sendMsgBtn').onclick=()=>{if(currentFriend==null)return;let t=$('chatInput').value.trim();if(!t)return;chats[currentFriend]=chats[currentFriend]||[];chats[currentFriend].push('You: '+t);localStorage.setItem('tot_chats',JSON.stringify(chats));$('chatInput').value='';window.openChat(friends.indexOf(currentFriend))};
 function renderFeed(){let total=Object.keys(myPicks).length;$('feedBox').innerHTML=`<p>Picks made: ${total}</p><p>No picks revealed here.</p>`}
 renderSurvey();
-</script><script>if(location.search.indexOf('mini=')===-1){setTimeout(function(){var sp=document.getElementById("splashScreen");if(sp){sp.classList.remove("active");var m=document.getElementById("menuScreen");if(m)m.classList.add("active")}},2600);}
+
 let _miniParam=new URLSearchParams(location.search).get('mini');
 if(_miniParam&&MINI_GAMES.some(g=>g.id===_miniParam)){setTimeout(()=>{show('miniScreen');if(_miniParam==='simon'){playSimonCycle()}else{playMini(_miniParam)}},300);}
+</script><script>if(location.search.indexOf('mini=')===-1){setTimeout(function(){var sp=document.getElementById("splashScreen");if(sp){sp.classList.remove("active");var m=document.getElementById("menuScreen");if(m)m.classList.add("active")}},2600);}
 </script></body></html>
