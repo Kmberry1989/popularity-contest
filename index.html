@@ -149,8 +149,14 @@ input{width:100%;padding:12px;border-radius:12px;border:2px solid #e8c9a0;font-s
 <div id="bonusTitle" style="font-size:24px;font-weight:900"></div>
 <div id="bonusBody"></div>
 <button class="big" id="bonusActionBtn">Open</button>
-<button class="small" id="bonusNextBtn">Next 5</button>
+<button class="small" id="bonusNextBtn">Next 5</button><button class="small" id="bonusMiniBtn">Mini Games</button>
 </div></div>
+<div class="screen" id="miniScreen">
+<div style="font-size:22px;font-weight:900;text-align:center;padding:8px">Mini Games</div>
+<div id="miniList" style="display:grid;gap:10px;padding:12px"></div>
+<div id="miniPlay" style="padding:12px;text-align:center"></div>
+<button class="small" id="miniBackBtn">Back</button>
+</div>
 <div class="screen" id="moreScreen">
 <div style="font-size:22px;font-weight:800;text-align:center">More</div>
 <div class="scroll">
@@ -228,7 +234,38 @@ $('bonusActionBtn').onclick=()=>{if(bonusKind==='capsule'){let prizes=['Star','H
 else if(bonusKind==='wheel'){let prizes=['10 hearts','20 hearts','Bonus pair','Free spin'];let p=prizes[Math.floor(Math.random()*prizes.length)];$('bonusBody').innerHTML='<div>Wheel landed: '+p+'</div>';beep(660,.3)}
 else if(bonusKind==='word'){let v=document.getElementById('wordInput')?.value||'';$('bonusBody').innerHTML='<div>'+(v.toUpperCase()==='HEART'?'Correct!':'It was HEART')+'</div>'}
 else{show('pairScreen');runIdx=0;renderPair()}};
-$('bonusNextBtn').onclick=()=>{runStart=(runStart+5)%PAIRS.length;runIdx=0;show('pairScreen');renderPair()};
+$('bonusMiniBtn').onclick=()=>showMiniGames();$('bonusNextBtn').onclick=()=>{runStart=(runStart+5)%PAIRS.length;runIdx=0;show('pairScreen');renderPair()};
+const MINI_GAMES=[
+{id:'wordsearch',name:'Word Search',desc:'Find COZY, PIZZA, WINTER in the grid'},
+{id:'howmany',name:'How Many Words?',desc:'How many words from POPULARITY?'},
+{id:'crossword',name:'Crossword Mini',desc:'Warm drink = COCOA'},
+{id:'difference',name:'Find the Difference',desc:'Tap the different picture'},
+{id:'oddone',name:'Odd One Out',desc:'Pick the one that does not belong'},
+{id:'sort',name:'Sorting Game',desc:'Sort items into Cozy / Food / Seasons'},
+{id:'spotpair',name:'Spot the Pair',desc:'Find the two that match'},
+{id:'missing',name:'What is Missing?',desc:'What went missing?'},
+{id:'arrow',name:'Arrow Haul',desc:'Tap the arrow that can go forward without hitting another line'},
+{id:'ballsort',name:'Ball Sort',desc:'Sort the balls by color'},
+{id:'scramble',name:'Word Scramble',desc:'Unscramble a pair word'},
+{id:'connect',name:'Word Connect',desc:'Tap letters in order to spell COZY'},
+];
+function showMiniGames(){show('miniScreen');$('miniList').innerHTML=MINI_GAMES.map(g=>`<button class="big" data-g="${g.id}">${g.name}<div style="font-size:13px;font-weight:400">${g.desc}</div></button>`).join('');document.querySelectorAll('#miniList button').forEach(b=>b.onclick=()=>playMini(b.dataset.g))};
+$('miniBackBtn').onclick=()=>show('menuScreen');
+function playMini(id){
+let el=$('miniPlay');
+if(id==='wordsearch'){el.innerHTML='<div>Grid: C O Z Y P<br>P I Z Z A X<br>W I N T E R Y<br>Tap a word you found</div><button class="big" onclick="this.textContent=\'Found COZY!\';beep(880,.3)">COZY</button> <button class="big" onclick="this.textContent=\'Found PIZZA!\';beep(880,.3)">PIZZA</button> <button class="big" onclick="this.textContent=\'Found WINTER!\';beep(880,.3)">WINTER</button>'}
+else if(id==='howmany'){el.innerHTML='<div>From POPULARITY, type a word you found</div><input id="hwInput" placeholder="POP, ART, RAIN..."><button class="big" onclick="document.getElementById(\'hwOut\').textContent=\'Nice! That counts.\'">Check</button><div id="hwOut"></div>'}
+else if(id==='crossword'){el.innerHTML='<div>Warm drink (5 letters)</div><input id="cwInput" placeholder="COCOA"><button class="big" onclick="document.getElementById(\'cwOut\').textContent=(document.getElementById(\'cwInput\').value.toUpperCase()==\'COCOA\'?\'Correct!\':\'Try again, no loss\')">Check</button><div id="cwOut"></div>'}
+else if(id==='difference'){let items=['Cozy Blanket','Pizza','Snow Day'];el.innerHTML='<div>Tap the different one</div>'+items.map((it,i)=>`<button class="big" onclick="this.textContent=(i===1?\'That is the different one!\':\'Same as the others, try another\')">${it}</button>`).join('')}
+else if(id==='oddone'){el.innerHTML='<div>Pizza, Burger, Taco, Snow Day - which does not belong?</div><button class="big" onclick="this.textContent=\'Right! Snow Day is not food\'">Snow Day</button> <button class="big" onclick="this.textContent=\'That is food, try another\'">Pizza</button>'}
+else if(id==='sort'){el.innerHTML='<div>Sort: Blanket goes to Cozy, Pizza goes to Food, Snow goes to Seasons</div><button class="big" onclick="this.textContent=\'Blanket -> Cozy!\'">Blanket -> Cozy</button> <button class="big" onclick="this.textContent=\'Pizza -> Food!\'">Pizza -> Food</button> <button class="big" onclick="this.textContent=\'Snow -> Seasons!\'">Snow -> Seasons</button>'}
+else if(id==='spotpair'){el.innerHTML='<div>Find the two matching pictures</div><button class="big" onclick="this.textContent=\'Match!\';beep(880,.3)">Pizza</button> <button class="big" onclick="this.textContent=\'Match!\';beep(880,.3)">Pizza</button> <button class="big" onclick="this.textContent=\'Not a match\'">Cozy</button>'}
+else if(id==='missing'){el.innerHTML='<div>Blanket, Pizza, Snow... one went missing. Which?</div><button class="big" onclick="this.textContent=\'Yes! Pizza went missing\'">Pizza</button> <button class="big" onclick="this.textContent=\'No, that one is still here\'">Blanket</button>'}
+else if(id==='arrow'){el.innerHTML='<div>Arrows: Up, Right, Down, Left. Tap the one that can go forward without hitting another line.</div><button class="big" onclick="this.textContent=\'It moved forward! Haul complete step 1/3\';beep(880,.3)">Right Arrow -&gt;</button> <button class="big" onclick="this.textContent=\'Blocked, try another\'">Up Arrow</button> <button class="big" onclick="this.textContent=\'Blocked, try another\'">Down Arrow</button><div>Clear all arrows to complete the haul image: a truck full of pair items.</div>'}
+else if(id==='ballsort'){el.innerHTML='<div>Sort the balls: Red, Blue, Green into matching tubes</div><button class="big" onclick="this.textContent=\'Red ball sorted!\'">Red -&gt; Red tube</button> <button class="big" onclick="this.textContent=\'Blue ball sorted!\'">Blue -&gt; Blue tube</button> <button class="big" onclick="this.textContent=\'Green ball sorted!\'">Green -&gt; Green tube</button>'}
+else if(id==='scramble'){el.innerHTML='<div>Unscramble: YZOC</div><input id="scInput" placeholder="COZY"><button class="big" onclick="document.getElementById(\'scOut\').textContent=(document.getElementById(\'scInput\').value.toUpperCase()==\'COZY\'?\'Correct!\':\'Try again\')">Check</button><div id="scOut"></div>'}
+else if(id==='connect'){el.innerHTML='<div>Tap letters in order: C O Z Y</div><button class="big" onclick="this.textContent=\'C!\'">C</button> <button class="big" onclick="this.textContent=\'O!\'">O</button> <button class="big" onclick="this.textContent=\'Z!\'">Z</button> <button class="big" onclick="this.textContent=\'Y! You spelled COZY\'">Y</button>'}
+}
 function checkReveal(){if(document.getElementById('waitingScreen').classList.contains('active')){let pairs=runPairs();if(pairs.every(p=>myPicks[p.id]&&partnerPicks[p.id]))showReveal()}}
 function showReveal(){let pairs=runPairs();let m=pairs.filter(pr=>myPicks[pr.id]&&partnerPicks[pr.id]&&myPicks[pr.id]===partnerPicks[pr.id]).length;saveStats({runs:1,matches:m});show('revealScreen');$('revealList').innerHTML='';drumRoll();pairs.forEach((p,i)=>{let you=myPicks[p.id],them=partnerPicks[p.id];let match=you===them;let row=document.createElement('div');row.className='revealrow';row.innerHTML=`${match?'<div class="spotlightbeam" style="left:30%"></div>':''}<div class="revealcard"><img src="${IMG[you]||''}"><div>You: ${you}</div></div><div class="revealcard"><img src="${IMG[them]||''}"><div>Them: ${them}</div></div>`;$('revealList').appendChild(row);setTimeout(()=>{if(match){trumpet();for(let c=0;c<20;c++){let el=document.createElement('div');el.className='confetti';el.style.left=Math.random()*100+'vw';el.style.background=['#ff8a3d','#ff5d8f','#4caf50','#ffd93d'][c%4];el.style.animationDelay=(Math.random()*.5)+'s';document.body.appendChild(el);setTimeout(()=>el.remove(),3000)}}else trombone()},1200+i*600)})}
 $('playBtn').onclick=async()=>{guessMode=false;runCount++;badMode=(runCount%3===0);startBgm();await ensureRoom();syncRoom();runIdx=0;show('pairScreen');renderPair()};
