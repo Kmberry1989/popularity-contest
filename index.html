@@ -56,6 +56,14 @@ input{width:100%;padding:12px;border-radius:12px;border:2px solid #e8c9a0;font-s
 
 50%{transform:scale(.96) skewX(2deg)}75%{transform:scale(1.04) skewX(-1deg)}}
 }
+
+.processstep{font-size:20px;font-weight:800;padding:14px;margin:8px 0;border-radius:12px;background:#fffdf6;border:3px solid #e8c9a0;opacity:.35;transition:all .4s}
+.processstep.on{opacity:1;border-color:#ff8a3d;transform:scale(1.03);box-shadow:0 0 20px rgba(255,138,61,.5)}
+.processstep.done{opacity:1;border-color:#4caf50}
+@keyframes sealpop{0%{transform:scale(2) rotate(-12deg);opacity:0}60%{transform:scale(.9) rotate(3deg);opacity:1}100%{transform:scale(1) rotate(-6deg)}}
+.seal{animation:sealpop .6s ease}
+@keyframes shuffle{0%{transform:translateX(0) rotate(0)}25%{transform:translateX(-20px) rotate(-6deg)}50%{transform:translateX(20px) rotate(6deg)}75%{transform:translateX(-10px) rotate(-3deg)}100%{transform:translateX(0) rotate(0)}}
+.shuffling{animation:shuffle .5s ease infinite}
 </style></head><body>
 <div class="float" style="left:8%;top:12%"></div><div class="float" style="right:10%;top:22%;animation-delay:1.5s;background:rgba(255,93,143,.25)"></div><div class="float" style="left:14%;bottom:18%;animation-delay:3s;background:rgba(76,175,80,.25)"></div><div class="float" style="right:16%;bottom:28%;animation-delay:2s"></div><div class="screen active" id="menuScreen">
 <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px">
@@ -77,11 +85,17 @@ input{width:100%;padding:12px;border-radius:12px;border:2px solid #e8c9a0;font-s
 <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;text-align:center">
 <div style="font-size:22px;font-weight:800">Waiting for your partner</div>
 <div id="waitingDetail" style="font-size:17px"></div>
-<button id="nudgeBtn">Nudge</button>
+<button id="inviteBtn">Invite</button><button id="soloBtn">Play alone</button>
 <button class="small" id="checkBtn">Check again</button>
 <button class="small" id="waitMenuBtn">Menu</button><button class="small" id="moreBtn3">⋯</button>
 </div></div>
 
+<div class="screen" id="processScreen">
+<div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:8px">
+<div class="processstep" id="step1">Sealing</div>
+<div class="processstep" id="step2">Shuffling</div>
+<div class="processstep" id="step3">Saving</div>
+</div></div>
 <div class="screen" id="revealScreen">
 <div style="font-size:22px;font-weight:800;text-align:center;padding:8px">Reveal</div>
 <div class="scroll" id="revealList"></div>
@@ -95,6 +109,12 @@ input{width:100%;padding:12px;border-radius:12px;border:2px solid #e8c9a0;font-s
 <div class="scroll" id="guessDoneList" style="width:100%"></div>
 <button class="small" id="guessDoneMenuBtn">Menu</button>
 </div></div>
+<div class="screen" id="soloScreen">
+<div style="font-size:22px;font-weight:800;text-align:center;padding:8px">Your picks</div>
+<div class="scroll" id="soloList"></div>
+<button class="big" id="soloNextBtn">Next 5</button>
+<button class="small" id="soloMenuBtn">Menu</button>
+</div>
 <div class="screen" id="moreScreen">
 <div style="font-size:22px;font-weight:800;text-align:center">More</div>
 <div class="scroll">
@@ -151,7 +171,10 @@ function endHold(){stopRumble();if(holdTimer){clearInterval(holdTimer);holdTimer
 $('optA').addEventListener('pointerdown',()=>startHold('a'));$('optB').addEventListener('pointerdown',()=>startHold('b'));
 window.addEventListener('pointerup',endHold);window.addEventListener('pointercancel',endHold);
 $('confirmBtn').onclick=async()=>{if(!preview)return;let m=runPairs()[runIdx];if(!guessMode)myPicks[m.id]=preview.label;let el=preview.side==='a'?$('optA'):$('optB');el.classList.remove('glow');el.classList.add('locked');try{navigator.vibrate&&navigator.vibrate([60,40,120])}catch(e){}beep(660,.15);setTimeout(()=>beep(880,.2),120);setTimeout(()=>beep(1100,.3,'triangle'),240);if(guessMode){guessPicks[m.id]=preview.label}else if(db&&roomId){try{let ref=roomRef(),snap=await getDoc(ref);let picks=snap.data()?.picks||{};picks[user?.uid||'guest']=myPicks;await updateDoc(ref,{picks})}catch(e){}}let dir=preview.side==='b'?'slideout-right':'slideout-left';$('pairWrap').classList.add(dir);setTimeout(()=>{runIdx++;if(runIdx>=5){if(guessMode){showGuessDone()}else{finishRun()}}else{renderPair()}},450)};
-async function finishRun(){let pairs=runPairs();let done=pairs.every(p=>myPicks[p.id]);if(!done){show('waitingScreen');return}let partnerDone=pairs.every(p=>partnerPicks[p.id]);if(partnerDone){showReveal()}else{show('waitingScreen');$('waitingDetail').textContent='You finished 5. Waiting for your partner to finish the same 5.'}}
+async function finishRun(){show('processScreen');['step1','step2','step3'].forEach((id,i)=>{setTimeout(()=>{let el=$(id);el.classList.add('on');if(i>0)$(['step1','step2','step3'][i-1]).classList.add('done');beep(500+i*150,.15)},i*700)});setTimeout(()=>{let pairs=runPairs();let partnerDone=pairs.every(p=>partnerPicks[p.id]);if(partnerDone){showReveal()}else{show('waitingScreen');$('waitingDetail').textContent='You finished 5.'}},2300)}
+$('soloBtn').onclick=()=>{show('soloScreen');let pairs=runPairs();$('soloList').innerHTML=pairs.map(pr=>`<div class="card"><img src="${IMG[myPicks[pr.id]]||''}" style="width:100%;height:120px;object-fit:contain"><div style="font-weight:800">${myPicks[pr.id]||''}</div></div>`).join('')};
+$('soloNextBtn').onclick=async()=>{runStart=(runStart+5)%PAIRS.length;if(db&&roomId){try{await updateDoc(roomRef(),{runStart})}catch(e){}}runIdx=0;show('pairScreen');renderPair()};
+$('soloMenuBtn').onclick=()=>show('menuScreen');
 function checkReveal(){if(document.getElementById('waitingScreen').classList.contains('active')){let pairs=runPairs();if(pairs.every(p=>myPicks[p.id]&&partnerPicks[p.id]))showReveal()}}
 function showReveal(){show('revealScreen');let pairs=runPairs();$('revealList').innerHTML='';drumRoll();pairs.forEach((p,i)=>{let you=myPicks[p.id],them=partnerPicks[p.id];let match=you===them;let row=document.createElement('div');row.className='revealrow';row.innerHTML=`<div class="revealcard"><img src="${IMG[you]||''}"><div>You: ${you}</div></div><div class="revealcard"><img src="${IMG[them]||''}"><div>Them: ${them}</div></div>`;$('revealList').appendChild(row);setTimeout(()=>{if(match)trumpet();else trombone()},1200+i*600)})}
 $('playBtn').onclick=async()=>{guessMode=false;startBgm();await ensureRoom();syncRoom();runIdx=0;show('pairScreen');renderPair()};
@@ -160,7 +183,7 @@ $('moreBackBtn').onclick=()=>show('menuScreen');
 $('waitMenuBtn').onclick=()=>show('menuScreen');
 $('revealMenuBtn').onclick=()=>show('menuScreen');
 $('nextRunBtn').onclick=async()=>{runStart=(runStart+5)%PAIRS.length;if(db&&roomId){try{await updateDoc(roomRef(),{runStart})}catch(e){}}runIdx=0;show('pairScreen');renderPair()};
-$('nudgeBtn').onclick=async()=>{let url=location.href.split('?')[0]+(roomId?'?room='+roomId:'');let text='Your turn in Popularity Contest!';if(navigator.share){try{await navigator.share({title:"Popularity Contest",text,url});return}catch(e){}}try{await navigator.clipboard.writeText(text+' '+url)}catch(e){location.href='sms:?body='+encodeURIComponent(text+' '+url)}};
+$('inviteBtn').onclick=async()=>{let url=location.href.split('?')[0]+(roomId?'?room='+roomId:'');let text='Play Popularity Contest with me!';if(navigator.share){try{await navigator.share({title:"Popularity Contest",text,url});return}catch(e){}}try{await navigator.clipboard.writeText(text+' '+url)}catch(e){location.href='sms:?body='+encodeURIComponent(text+' '+url)}};
 $('checkBtn').onclick=()=>{syncRoom();setTimeout(checkReveal,500)};
 function showGuessDone(){show('guessDoneScreen');$('guessDoneName').textContent=guessFriend;$('guessDoneList').innerHTML=guessPairs.map(pr=>`<div class="card"><img src="${IMG[guessPicks[pr.id]]||''}" style="width:100%;height:120px;object-fit:contain"><div style="font-weight:800">${guessPicks[pr.id]||''}</div></div>`).join('')}
 $('guessBtn').onclick=()=>{let f=JSON.parse(localStorage.getItem('tot_friends')||'[]');if(!f.length)return;guessFriend=f[Math.floor(Math.random()*f.length)];guessMode=true;guessPicks={};let shuffled=[...PAIRS].sort(()=>Math.random()-.5).slice(0,5);guessPairs=shuffled.map((pr,i)=>({id:'g'+i,a:pr[0],b:pr[1],bucket:pr[4]}));startBgm();runIdx=0;show('pairScreen');renderPair()};
