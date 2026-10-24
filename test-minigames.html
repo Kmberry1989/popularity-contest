@@ -1,0 +1,265 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Mini Games Test</title></head><body><h1>Mini Games Auto Test</h1><div id="summary">RUNNING</div><div id="results"></div><script>
+const PAIRS=[
+["Blanket fort","Porch swing","🛏️","🪑","cozy"],["Fireplace","String lights","🔥","✨","cozy"],["Reading nook","Bubble bath","📖","🛁","cozy"],["Fuzzy socks","Cozy sweater","🧦","🧥","cozy"],["Candlelight","Rainy window","🕯️","🌧️","cozy"],["Rocking chair","Hammock","🪑","🥥","cozy"],["Slippers","Robe","🩴","🥼","cozy"],["Teacup","Coffee mug","🍵","☕","cozy"],["Quilt","Throw pillows","🛏️","🛋️","cozy"],["Armchair","Beanbag","🪑","💺","cozy"],["Lantern","Fairy jar","🏮","🫙","cozy"],["Tea kettle","French press","🫖","☕","cozy"],["Nightlight","Dreamcatcher","💡","🪶","cozy"],["Cabin","Cottage","🏡","🏠","cozy"],["Bookshelf","Mug shelf","📚","☕","cozy"],
+["Apple pie","Ice cream","🥧","🍦","food"],["Pancakes","Waffles","🥞","🧇","food"],["Hot cocoa","Lemonade","🍫","🍋","food"],["Tacos","Pizza","🌮","🍕","food"],["Strawberries","Watermelon","🍓","🍉","food"],["Donuts","Cookies","🍩","🍪","food"],["Mac & cheese","Grilled cheese","🧀","🥪","food"],["Milkshake","Smoothie","🥤","🍹","food"],["Brownies","Cupcakes","🍫","🧁","food"],["Popcorn","Pretzels","🍿","🥨","food"],["Fruit salad","Yogurt parfait","🍇","🍦","food"],["Bagel","Croissant","🥯","🥐","food"],["Spaghetti","Lasagna","🍝","🍲","food"],["Cheesecake","Brownie sundae","🍰","🍨","food"],["Apple cider","Iced tea","🍎","🧋","food"],
+["Snow day","Beach day","❄️","🏖️","seasons"],["Fall leaves","Spring flowers","🍂","🌸","seasons"],["Mountains","Lake","⛰️","🏞️","seasons"],["Sunset","Starry night","🌇","🌌","seasons"],["Garden path","Forest trail","🌿","🌲","seasons"],["Pumpkin patch","Apple orchard","🎃","🍎","seasons"],["Snowman","Picnic","⛄","🧺","seasons"],["Cherry blossoms","Sunflowers","🌸","🌻","seasons"],["Fireflies","Snowflakes","✨","❄️","seasons"],["Ice skating","Swimming","⛸️","🏊","seasons"],["Rain boots","Sunglasses","🥾","🕶️","seasons"],["Harvest moon","Northern lights","🌕","🌌","seasons"],["River","Waterfall","🏞️","💦","seasons"],["Meadow","Valley","🌾","🏔️","seasons"],["Seaside","Countryside","🌊","🌾","seasons"],
+["Cat","Dog","🐱","🐶","animals"],["Bunny","Bird","🐰","🐦","animals"],["Panda","Penguin","🐼","🐧","animals"],["Fox","Deer","🦊","🦌","animals"],["Dolphin","Sea turtle","🐬","🐢","animals"],["Owl","Squirrel","🦉","🐿️","animals"],["Koala","Red panda","🐨","🦝","animals"],["Butterfly","Ladybug","🦋","🐞","animals"],["Hedgehog","Raccoon","🦔","🦝","animals"],["Elephant","Giraffe","🐘","🦒","animals"],["Frog","Duckling","🐸","🦆","animals"],["Lion","Tiger","🦁","🐯","animals"],["Swan","Flamingo","🦢","🦩","animals"],["Otter","Beaver","🦦","🦫","animals"],["Chipmunk","Mouse","🐿️","🐭","animals"],
+["Sofa","Loveseat","🛋️","🪑","cozy"],["Ottoman","Footstool","🛋️","🦶","cozy"],["Curtains","Blinds","🪟","🪟","cozy"],["Fire pit","Sauna","🔥","🧖","cozy"],["Window seat","Balcony","🪟","🌇","cozy"],["Burrito","Quesadilla","🌯","🧀","food"],["Ramen","Pho","🍜","🍲","food"],["Sushi","Dumplings","🍣","🥟","food"],["Chicken soup","Tomato soup","🍲","🍅","food"],["Sandwich","Wrap","🥪","🌯","food"],["Desert","Jungle","🏜️","🌴","seasons"],["Glacier","Volcano","🧊","🌋","seasons"],["Vineyard","Lavender field","🍇","🪻","seasons"],["Lighthouse","Windmill","🗼","🌬️","seasons"],["Canyon","Cliff","🏜️","🧗","seasons"],["Wolf","Bear","🐺","🐻","animals"],["Zebra","Hippo","🦓","🦛","animals"],["Peacock","Parrot","🦚","🦜","animals"],["Kangaroo","Platypus","🦘","🦫","animals"],["Crab","Starfish","🦀","⭐","animals"],
+["Daybed","Futon","🛏️","🛋️","cozy"],["Pajamas","Loungewear","👘","🧥","cozy"],["Throw rug","Sheepskin rug","🧶","🐑","cozy"],["Dresser","Vanity","🪑","🪞","cozy"],["Attic nook","Basement den","🏠","🕳️","cozy"],["Steak","Salmon","🥩","🐟","food"],["Curry","Stir fry","🍛","🥘","food"],["Biscuits","Scones","🍪","🥮","food"],["Chocolate cake","Vanilla cake","🍫","🍰","food"],["Fruit tart","Lemon bar","🍓","🍋","food"],["Rose garden","Tulip field","🌹","🌷","seasons"],["Ice cave","Sand dune","🧊","🏜️","seasons"],["Sunrise","Moonrise","🌅","🌙","seasons"],["Rainforest","Savanna","🌴","🦒","seasons"],["Thunderstorm","Gentle rain","⛈️","🌧️","seasons"],["Cheetah","Leopard","🐆","🐆","animals"],["Gorilla","Orangutan","🦍","🦧","animals"],["Seahorse","Jellyfish","🪸","🪼","animals"],["Robin","Cardinal","🐦","🐦","animals"],["Lamb","Calf","🐑","🐄","animals"],
+["Red","Blue","🔴","🔵","color"],["Pink","Purple","🩷","🟣","color"],["Black","White","⚫","⚪","color"],["Gold","Silver","🟡","⚪","color"],["Teal","Coral","🩵","🪸","color"],["Navy","Sky blue","🔵","🩵","color"],["Green","Yellow","🟢","🟡","color"],["Orange","Pink","🟠","🩷","color"],["Brown","Beige","🟤","🔶","color"],["Lavender","Mint","🪻","🌿","color"],["Crimson","Burgundy","🔴","🍷","color"],["Turquoise","Emerald","🩵","💚","color"],["Gray","Charcoal","⬜","⬛","color"],["Peach","Lemon","🍑","🍋","color"],["Magenta","Cyan","🩷","🩵","color"],["Indigo","Violet","🟣","🟪","color"],["Rose","Ruby","🌹","💎","color"],["Olive","Sage","🫒","🌿","color"],["Bronze","Copper","🥉","🟠","color"],["Cream","Taupe","🍦","🟤","color"],["Hot pink","Baby blue","🩷","🩵","color"],["Forest green","Lime","🌲","🍋","color"],["Maroon","Mustard","🟤","🟡","color"],["Pastel pink","Pastel blue","🩷","🩵","color"],["Rainbow","Monochrome","🌈","⬛","color"]];
+const IMG={"Blanket fort":"img/cozy-blanket-fort-fr.webp","Porch swing":"img/cozy-porch-swing-fr.webp","Fireplace":"img/cozy-fireplace-fr.webp","String lights":"img/cozy-string-lights-fr.webp","Reading nook":"img/cozy-reading-nook-fr.webp","Bubble bath":"img/cozy-bubble-bath-fr.webp","Fuzzy socks":"img/cozy-fuzzy-socks-fr.webp","Cozy sweater":"img/cozy-sweater-fr.webp","Candlelight":"img/cozy-candlelight-fr.webp","Rainy window":"img/cozy-rainy-window-fr.webp","Rocking chair":"img/cozy-rocking-chair-fr.webp","Hammock":"img/cozy-hammock-fr.webp","Slippers":"img/cozy-slippers-fr.webp","Robe":"img/cozy-robe-fr.webp","Teacup":"img/cozy-teacup-fr.webp","Coffee mug":"img/cozy-coffee-mug-fr.webp","Quilt":"img/cozy-quilt-fr.webp","Throw pillows":"img/cozy-throw-pillows-fr.webp","Armchair":"img/cozy-armchair-fr.webp","Beanbag":"img/cozy-beanbag-fr.webp","Lantern":"img/cozy-lantern-fr.webp","Fairy jar":"img/cozy-fairy-jar-fr.webp","Tea kettle":"img/cozy-tea-kettle-fr.webp","French press":"img/cozy-french-press-fr.webp","Nightlight":"img/cozy-nightlight-fr.webp","Dreamcatcher":"img/cozy-dreamcatcher-fr.webp","Cabin":"img/cozy-cabin-fr.webp","Cottage":"img/cozy-cottage-fr.webp","Bookshelf":"img/cozy-bookshelf-fr.webp","Mug shelf":"img/cozy-mug-shelf-fr.webp","Sofa":"img/cozy-sofa-fr.webp","Loveseat":"img/cozy-loveseat-fr.webp","Ottoman":"img/cozy-ottoman-fr.webp","Footstool":"img/cozy-footstool-fr.webp","Curtains":"img/cozy-curtains-fr.webp","Blinds":"img/cozy-blinds-fr.webp","Fire pit":"img/cozy-fire-pit-fr.webp","Sauna":"img/cozy-sauna-fr.webp","Window seat":"img/cozy-window-seat-fr.webp","Balcony":"img/cozy-balcony-fr.webp","Daybed":"img/cozy-daybed-fr.webp","Futon":"img/cozy-futon-fr.webp","Pajamas":"img/cozy-pajamas-fr.webp","Loungewear":"img/cozy-loungewear-fr.webp","Throw rug":"img/cozy-throw-rug-fr.webp","Sheepskin rug":"img/cozy-sheepskin-rug-fr.webp","Dresser":"img/cozy-dresser-fr.webp","Vanity":"img/cozy-vanity-fr.webp","Attic nook":"img/cozy-attic-nook-fr.webp","Basement den":"img/cozy-basement-den-fr.webp","Apple pie":"img/food-apple-pie-fr.webp","Ice cream":"img/food-ice-cream-fr.webp","Pancakes":"img/food-pancakes-fr.webp","Waffles":"img/food-waffles-fr.webp","Hot cocoa":"img/food-hot-cocoa-fr.webp","Lemonade":"img/food-lemonade-fr.webp","Tacos":"img/food-tacos-fr.webp","Pizza":"img/food-pizza-fr.webp","Strawberries":"img/food-strawberries-fr.webp","Watermelon":"img/food-watermelon-fr.webp","Donuts":"img/food-donuts-fr.webp","Cookies":"img/food-cookies-fr.webp","Mac & cheese":"img/food-mac-cheese-fr.webp","Grilled cheese":"img/food-grilled-cheese-fr.webp","Milkshake":"img/food-milkshake-fr.webp","Smoothie":"img/food-smoothie-fr.webp","Brownies":"img/food-brownies-fr.webp","Cupcakes":"img/food-cupcakes-fr.webp","Popcorn":"img/food-popcorn-fr.webp","Pretzels":"img/food-pretzels-fr.webp","Fruit salad":"img/food-fruit-salad-fr.webp","Yogurt parfait":"img/food-yogurt-parfait-fr.webp","Bagel":"img/food-bagel-fr.webp","Croissant":"img/food-croissant-fr.webp","Spaghetti":"img/food-spaghetti-fr.webp","Lasagna":"img/food-lasagna-fr.webp","Cheesecake":"img/food-cheesecake-fr.webp","Brownie sundae":"img/food-brownie-sundae-fr.webp","Apple cider":"img/food-apple-cider-fr.webp","Iced tea":"img/food-iced-tea-fr.webp","Burrito":"img/food-burrito-fr.webp","Quesadilla":"img/food-quesadilla-fr.webp","Ramen":"img/food-ramen-fr.webp","Pho":"img/food-pho-fr.webp","Sushi":"img/food-sushi-fr.webp","Dumplings":"img/food-dumplings-fr.webp","Chicken soup":"img/food-chicken-soup-fr.webp","Tomato soup":"img/food-tomato-soup-fr.webp","Sandwich":"img/food-sandwich-fr.webp","Wrap":"img/food-wrap-fr.webp","Steak":"img/food-steak-fr.webp","Salmon":"img/food-salmon-fr.webp","Curry":"img/food-curry-fr.webp","Stir fry":"img/food-stir-fry-fr.webp","Biscuits":"img/food-biscuits-fr.webp","Scones":"img/food-scones-fr.webp","Chocolate cake":"img/food-chocolate-cake-fr.webp","Vanilla cake":"img/food-vanilla-cake-fr.webp","Fruit tart":"img/food-fruit-tart-fr.webp","Lemon bar":"img/food-lemon-bar-fr.webp","Snow day":"img/seasons-snow-day-fr.webp","Beach day":"img/seasons-beach-day-fr.webp","Fall leaves":"img/seasons-fall-leaves-fr.webp","Spring flowers":"img/seasons-spring-flowers-fr.webp","Mountains":"img/seasons-mountains-fr.webp","Lake":"img/seasons-lake-fr.webp","Sunset":"img/seasons-sunset-fr.webp","Starry night":"img/seasons-starry-night-fr.webp","Garden path":"img/seasons-garden-path-fr.webp","Forest trail":"img/seasons-forest-trail-fr.webp","Pumpkin patch":"img/seasons-pumpkin-patch-fr.webp","Apple orchard":"img/seasons-apple-orchard-fr.webp","Snowman":"img/seasons-snowman-fr.webp","Picnic":"img/seasons-picnic-fr.webp","Cherry blossoms":"img/seasons-cherry-blossoms-fr.webp","Sunflowers":"img/seasons-sunflowers-fr.webp","Fireflies":"img/seasons-fireflies-fr.webp","Snowflakes":"img/seasons-snowflakes-fr.webp","Ice skating":"img/seasons-ice-skating-fr.webp","Swimming":"img/seasons-swimming-fr.webp","Rain boots":"img/seasons-rain-boots-fr.webp","Sunglasses":"img/seasons-sunglasses-fr.webp","Harvest moon":"img/seasons-harvest-moon-fr.webp","Northern lights":"img/seasons-northern-lights-fr.webp","River":"img/seasons-river-fr.webp","Waterfall":"img/seasons-waterfall-fr.webp","Meadow":"img/seasons-meadow-fr.webp","Valley":"img/seasons-valley-fr.webp","Seaside":"img/seasons-seaside-fr.webp","Countryside":"img/seasons-countryside-fr.webp","Desert":"img/seasons-desert-fr.webp","Jungle":"img/seasons-jungle-fr.webp","Glacier":"img/seasons-glacier-fr.webp","Volcano":"img/seasons-volcano-fr.webp","Vineyard":"img/seasons-vineyard-fr.webp","Lavender field":"img/seasons-lavender-field-fr.webp","Lighthouse":"img/seasons-lighthouse-fr.webp","Windmill":"img/seasons-windmill-fr.webp","Canyon":"img/seasons-canyon-fr.webp","Cliff":"img/seasons-cliff-fr.webp","Rose garden":"img/seasons-rose-garden-fr.webp","Tulip field":"img/seasons-tulip-field-fr.webp","Ice cave":"img/seasons-ice-cave-fr.webp","Sand dune":"img/seasons-sand-dune-fr.webp","Sunrise":"img/seasons-sunrise-fr.webp","Moonrise":"img/seasons-moonrise-fr.webp","Rainforest":"img/seasons-rainforest-fr.webp","Savanna":"img/seasons-savanna-fr.webp","Thunderstorm":"img/seasons-thunderstorm-fr.webp","Gentle rain":"img/seasons-gentle-rain-fr.webp","Cat":"img/animals-cat-fr.webp","Dog":"img/animals-dog-fr.webp","Bunny":"img/animals-bunny-fr.webp","Bird":"img/animals-bird-fr.webp","Panda":"img/animals-panda-fr.webp","Penguin":"img/animals-penguin-fr.webp","Fox":"img/animals-fox-fr.webp","Deer":"img/animals-deer-fr.webp","Dolphin":"img/animals-dolphin-fr.webp","Sea turtle":"img/animals-sea-turtle-fr.webp","Owl":"img/animals-owl-fr.webp","Squirrel":"img/animals-squirrel-fr.webp","Koala":"img/animals-koala-fr.webp","Red panda":"img/animals-red-panda-fr.webp","Butterfly":"img/animals-butterfly-fr.webp","Ladybug":"img/animals-ladybug-fr.webp","Hedgehog":"img/animals-hedgehog-fr.webp","Raccoon":"img/animals-raccoon-fr.webp","Elephant":"img/animals-elephant-fr.webp","Giraffe":"img/animals-giraffe-fr.webp","Frog":"img/animals-frog-fr.webp","Duckling":"img/animals-duckling-fr.webp","Lion":"img/animals-lion-fr.webp","Tiger":"img/animals-tiger-fr.webp","Swan":"img/animals-swan-fr.webp","Flamingo":"img/animals-flamingo-fr.webp","Otter":"img/animals-otter-fr.webp","Beaver":"img/animals-beaver-fr.webp","Chipmunk":"img/animals-chipmunk-fr.webp","Mouse":"img/animals-mouse-fr.webp","Wolf":"img/animals-wolf-fr.webp","Bear":"img/animals-bear-fr.webp","Zebra":"img/animals-zebra-fr.webp","Hippo":"img/animals-hippo-fr.webp","Peacock":"img/animals-peacock-fr.webp","Parrot":"img/animals-parrot-fr.webp","Kangaroo":"img/animals-kangaroo-fr.webp","Platypus":"img/animals-platypus-fr.webp","Crab":"img/animals-crab-fr.webp","Starfish":"img/animals-starfish-fr.webp","Cheetah":"img/animals-cheetah-fr.webp","Leopard":"img/animals-leopard-fr.webp","Gorilla":"img/animals-gorilla-fr.webp","Orangutan":"img/animals-orangutan-fr.webp","Seahorse":"img/animals-seahorse-fr.webp","Jellyfish":"img/animals-jellyfish-fr.webp","Robin":"img/animals-robin-fr.webp","Cardinal":"img/animals-cardinal-fr.webp","Lamb":"img/animals-lamb-fr.webp","Calf":"img/animals-calf-fr.webp","Red":"img/color-red-fr.webp","Blue":"img/color-blue-fr.webp","Pink":"img/color-pink-fr.webp","Purple":"img/color-purple-fr.webp","Black":"img/color-black-fr.webp","White":"img/color-white-fr.webp","Gold":"img/color-gold-fr.webp","Silver":"img/color-silver-fr.webp","Teal":"img/color-teal-fr.webp","Coral":"img/color-coral-fr.webp","Navy":"img/color-navy-fr.webp","Sky blue":"img/color-sky-blue-fr.webp","Green":"img/color-green-fr.webp","Yellow":"img/color-yellow-fr.webp","Orange":"img/color-orange-fr.webp","Brown":"img/color-brown-fr.webp","Beige":"img/color-beige-fr.webp","Lavender":"img/color-lavender-fr.webp","Mint":"img/color-mint-fr.webp","Crimson":"img/color-crimson-fr.webp","Burgundy":"img/color-burgundy-fr.webp","Turquoise":"img/color-turquoise-fr.webp","Emerald":"img/color-emerald-fr.webp","Gray":"img/color-gray-fr.webp","Charcoal":"img/color-charcoal-fr.webp","Peach":"img/color-peach-fr.webp","Lemon":"img/color-lemon-fr.webp","Magenta":"img/color-magenta-fr.webp","Cyan":"img/color-cyan-fr.webp","Indigo":"img/color-indigo-fr.webp","Violet":"img/color-violet-fr.webp","Rose":"img/color-rose-fr.webp","Ruby":"img/color-ruby-fr.webp","Olive":"img/color-olive-fr.webp","Sage":"img/color-sage-fr.webp","Bronze":"img/color-bronze-fr.webp","Copper":"img/color-copper-fr.webp","Cream":"img/color-cream-fr.webp","Taupe":"img/color-taupe-fr.webp","Hot pink":"img/color-hot-pink-fr.webp","Baby blue":"img/color-baby-blue-fr.webp","Forest green":"img/color-forest-green-fr.webp","Lime":"img/color-lime-fr.webp","Maroon":"img/color-maroon-fr.webp","Mustard":"img/color-mustard-fr.webp","Pastel pink":"img/color-pastel-pink-fr.webp","Pastel blue":"img/color-pastel-blue-fr.webp","Rainbow":"img/color-rainbow-fr.webp","Wet socks all day":"img/bad-wet-socks-v2-fr.webp","Sand in your shoes":"img/bad-sand-shoes-fr.webp","Phone at 1%":"img/bad-phone-1pct-fr.webp","No Wi-Fi all day":"img/bad-no-wifi-fr.webp","Alarm at 4am":"img/bad-alarm-4am-fr.webp","Miss your bus":"img/bad-miss-bus-fr.webp","Burnt toast":"img/bad-burnt-toast-v2-fr.webp","Cold shower":"img/bad-cold-shower-v2-fr.webp","Stuck in traffic":"img/bad-traffic-fr.webp","Flat tire":"img/bad-flat-tire-fr.webp","Rain on laundry day":"img/bad-rain-laundry-fr.webp","Lost keys":"img/bad-lost-keys-v2-fr.webp","Itchy sweater":"img/bad-itchy-sweater-v2-fr.webp","Tight shoes":"img/bad-tight-shoes-v2-fr.webp","Broken umbrella":"img/bad-broken-umbrella-v2-fr.webp","Muddy puddle splash":"img/bad-muddy-puddle-v2-fr.webp","Long line":"img/bad-long-line-v2-fr.webp","Empty fridge":"img/bad-empty-fridge-v2-fr.webp","Squeaky door all night":"img/bad-squeaky-door-v2-fr.webp","Mosquito in your room":"img/bad-mosquito-fr.webp","Spilled coffee":"img/bad-spilled-coffee-v2-fr.webp","Dropped phone":"img/bad-dropped-phone-fr.webp","Brain freeze":"img/bad-brain-freeze-fr.webp","Bad haircut":"img/bad-bad-haircut-fr.webp","Homework on Friday":"img/bad-homework-fr.webp","Early Monday meeting":"img/bad-monday-meeting-fr.webp","Step on a Lego":"img/bad-problem-lego-fr.webp","Paper cut":"img/bad-paper-sad-fr.webp","Sore throat":"img/bad-problem-sore-throat-fr.webp","Sunburn":"img/bad-sunburn-adult-fr.webp","Stub your toe":"img/bad-stub-adult-fr.webp","Flat soda":"img/bad-flat-soda-v2-fr.webp","Melted ice cream":"img/bad-melted-icecream-v2-fr.webp","Lost wallet":"img/bad-lost-wallet-v2-fr.webp","Broken zipper":"img/bad-broken-zipper-v2-fr.webp","Dead car battery":"img/bad-dead-battery-v2-fr.webp","No hot water":"img/bad-no-hot-water-v2-fr.webp","Tangled headphones":"img/bad-tangled-headphones-v2-fr.webp","Slow internet":"img/bad-slow-internet-v2-fr.webp","Soggy sandwich":"img/bad-soggy-sandwich-v2-fr.webp","Stale chips":"img/bad-stale-chips-v2-fr.webp","Itchy tag":"img/bad-itchy-tag-v2-fr.webp","Squeaky shoes":"img/bad-squeaky-shoes-v2-fr.webp","Broken pencil":"img/bad-broken-pencil-v2-fr.webp","Dull scissors":"img/bad-dull-scissors-v2-fr.webp","Wet phone":"img/bad-wet-phone-v2-fr.webp","Cracked screen":"img/bad-cracked-screen-v2-fr.webp","Leaky bottle":"img/bad-leaky-bottle-v2-fr.webp","Foggy glasses":"img/bad-foggy-glasses-v2-fr.webp","Stuck drawer":"img/bad-stuck-drawer-v2-fr.webp","Wobbly table":"img/bad-wobbly-table-v2-fr.webp","Melted candle":"img/bad-melted-candle-v2-fr.webp","Squeaky cart":"img/bad-squeaky-cart-v2-fr.webp","Tangled cable":"img/bad-tangled-cable-v2-fr.webp","Empty pen":"img/bad-empty-pen-v2-fr.webp","Cold pizza":"img/bad-cold-pizza-v2-fr.webp","Warm soda":"img/bad-warm-soda-v2-fr.webp","Broken shoelace":"img/bad-broken-shoelace-v2-fr.webp","Lost sock":"img/bad-lost-sock-v2-fr.webp","Headache":"img/bad-headache-adult-fr.webp","Monochrome":"img/color-monochrome-fr.webp"};
+const MINI_GAMES=[
+{id:'wordsearch',name:'Word Search',desc:'Find COZY, PIZZA, WINTER'},
+{id:'howmany',name:'How Many Words?',desc:'Words from POPULARITY'},
+{id:'crossword',name:'Crossword Mini',desc:'Warm drink = COCOA'},
+{id:'difference',name:'Find the Difference',desc:'Tap the different picture'},
+{id:'oddone',name:'Odd One Out',desc:'Pick the one that does not belong'},
+{id:'sort',name:'Sorting Game',desc:'Sort into Cozy / Food / Seasons'},
+{id:'spotpair',name:'Spot the Pair',desc:'Find the two that match'},
+{id:'missing',name:'What is Missing?',desc:'What went missing?'},
+{id:'arrow',name:'Arrow Haul',desc:'Tap the arrow that can go forward'},
+{id:'ballsort',name:'Ball Sort',desc:'Sort balls by color'},
+{id:'scramble',name:'Word Scramble',desc:'Unscramble a pair word'},
+{id:'connect',name:'Word Connect',desc:'Tap letters to spell COZY'},
+{id:'simon',name:'Simon Says',desc:'Follow lights and sounds, 1, 2, 3, 4...'},
+{id:'hammer',name:'Hammer Nails',desc:'Tap fast to hammer the nail in'},
+{id:'balloon',name:'Blow Up Balloon',desc:'Hold to blow, let go before it pops'},
+{id:'paint',name:'Paint the Wall',desc:'Drag to paint the wall'},
+];
+function playSimon(el){
+let colors=[['#ff5d5d',523],['#4caf50',659],['#4a90e2',784],['#ffd93d',1047]];
+let pattern=[Math.floor(Math.random()*4)];
+let step=0, showing=false, slow=700;
+el.innerHTML='<div id="simonMsg">Watch: 1 beat</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0">'+colors.map(function(c,i){return '<button class="simonbtn" data-i="'+i+'" style="height:100px;background:'+c[0]+';border-radius:18px;border:3px solid #fff;opacity:.6"></button>'}).join('')+'</div><div>No big deal if you miss, it gets easier.</div>';
+let btns=el.querySelectorAll('.simonbtn');
+function light(i){let b=btns[i];b.style.opacity='1';b.style.transform='scale(1.05)';beep(colors[i][1],.4,'sine',.12);setTimeout(function(){b.style.opacity='.6';b.style.transform='scale(1)'},400)}
+function showPattern(){showing=true;step=0;document.getElementById('simonMsg').textContent='Watch: '+pattern.length+' beat'+(pattern.length>1?'s':'');pattern.forEach(function(v,idx){setTimeout(function(){light(v)},idx*slow)});setTimeout(function(){showing=false;document.getElementById('simonMsg').textContent='Your turn'},pattern.length*slow)}
+showPattern();
+btns.forEach(function(b){b.onclick=function(){if(showing)return;let i=+b.dataset.i;light(i);if(i===pattern[step]){step++;if(step===pattern.length){if(pattern.length>=5){document.getElementById('simonMsg').textContent='Done!';setTimeout(async()=>{await buildRun();runIdx=0;nextPairs()},1200)}else{document.getElementById('simonMsg').textContent='Nice! Next: '+(pattern.length+1);pattern.push(Math.floor(Math.random()*4));slow=Math.max(400,slow-50);setTimeout(showPattern,800)}}}else{document.getElementById('simonMsg').textContent='No big deal, watching again, easier';if(pattern.length>1){pattern.pop()}slow=Math.min(900,slow+150);setTimeout(showPattern,800)}}});
+}
+function playMini(id){addXP(3);window._miniDone=false;let el=$('miniPlay');let _t={wordsearch:'img/mini-wordsearch.png',howmany:'img/mini-howmany.png',crossword:'img/mini-crossword.png',difference:'img/mini-difference.png',oddone:'img/mini-oddone.png',sort:'img/mini-sort.png',spotpair:'img/mini-spotpair.png',missing:'img/mini-missing.png',arrow:'img/mini-arrow.png',ballsort:'img/mini-ballsort.png',scramble:'img/mini-scramble.png',connect:'img/mini-connect.png',simon:'img/mini-simon.png',hammer:'img/mini-hammer.png',balloon:'img/mini-balloon.png',paint:'img/mini-paint.png'};let _g=MINI_GAMES.find(g=>g.id===id);if($('miniTitle'))$('miniTitle').innerHTML=_t[id]?'<img src="'+_t[id]+'" style="width:240px;max-width:80vw;height:auto">':'<div class="clayhdr">'+(_g?_g.name:id)+'</div>';
+function finish(){if(window._miniDone)return;window._miniDone=true;beep(880,.3);el.innerHTML='<div style="text-align:center;padding:20px"><img src="img/clay-heart.png" style="width:80px;height:80px"></div>';setTimeout(async()=>{window._miniDone=false;await buildRun();runIdx=0;nextPairs()},1400)}
+function tileImg(name,extra=''){return '<div style="border:3px solid #e8c9a0;border-radius:18px;overflow:hidden;background:#fff;'+extra+'"><img src="'+(IMG[name]||'')+'" style="width:100%;aspect-ratio:3/2;object-fit:cover;display:block"><div style="font-weight:800;padding:6px;text-align:center">'+name+'</div></div>'}
+function pickItems(n){let all=PAIRS.map(pr=>pr[0]).concat(PAIRS.map(pr=>pr[1]));return [...new Set(all)].sort(()=>Math.random()-.5).slice(0,n)}
+if(id==='wordsearch'){let words=['COZY','PIZZA','WINTER'];let R=7,C=7;let grid=Array.from({length:R},()=>Array.from({length:C},()=> 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'[Math.floor(Math.random()*26)]));let place=(w,r,c,dr,dc)=>{for(let i=0;i<w.length;i++)grid[r+i*dr][c+i*dc]=w[i]};place('COZY',0,0,0,1);place('PIZZA',0,6,1,0);place('WINTER',5,0,0,1);let found=[],sel=[];let render=(mmsg='')=>{el.innerHTML='<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:6px;max-width:380px;margin:0 auto">'+grid.map((row,r)=>row.map((ch,c)=>{let isSel=sel.some(p=>p[0]===r&&p[1]===c);let isFound=found.some(w=>w.cells.some(p=>p[0]===r&&p[1]===c));return '<button style="aspect-ratio:1;font-size:22px;font-weight:900;border-radius:10px;border:3px solid '+(isFound?'#4caf50':isSel?'#ff8a3d':'#e8c9a0')+';background:'+(isFound?'#c8f7c8':isSel?'#ffe9c9':'#fff')+'" data-r="'+r+'" data-c="'+c+'">'+ch+'</button>'}).join('')).join('')+'</div><div style="margin-top:12px;font-weight:800">'+words.map(w=>'<span style="margin:0 8px;'+(found.some(f=>f.word===w)?'text-decoration:line-through;opacity:.5':'')+'">'+w+'</span>').join('')+'</div><div style="margin-top:8px;font-weight:800">'+mmsg+'</div>';el.querySelectorAll('button[data-r]').forEach(b=>b.onclick=()=>{let r=+b.dataset.r,c=+b.dataset.c;if(sel.some(p=>p[0]===r&&p[1]===c))return;sel.push([r,c]);let str=sel.map(p=>grid[p[0]][p[1]]).join('');let hit=words.find(w=>w===str&&!found.some(f=>f.word===w));if(hit){found.push({word:hit,cells:[...sel]});sel=[];beep(880,.3);if(found.length===words.length){render('All found!');finish()}else render('Found '+hit+'!')}else if(!words.some(w=>w.startsWith(str))){sel=[];render('Not a word, try another')}else render('')})};render()}
+else if(id==='howmany'){let counts={};'POPULARITY'.split('').forEach(ch=>counts[ch]=(counts[ch]||0)+1);let found=[];let render=(msg='')=>{el.innerHTML='<div style="font-weight:800;margin-bottom:8px">Letters: P O P U L A R I T Y</div><div style="font-weight:800">Found: '+found.length+' / 5</div><div style="margin:8px 0">'+found.map(w=>'<span style="margin:0 6px;font-weight:800">'+w+'</span>').join('')+'</div><input id="hwInput" style="text-transform:uppercase" placeholder="Type a word"><button class="big" id="hwBtn">Check</button><div style="font-weight:800;margin-top:8px">'+msg+'</div>';document.getElementById('hwBtn').onclick=()=>{let v=(document.getElementById('hwInput').value||'').toUpperCase().replace(/[^A-Z]/g,'');if(v.length<3){render('Need 3 letters or more');return}if(found.includes(v)){render('Already found that one');return}let c={};for(let ch of v){c[ch]=(c[ch]||0)+1;if(c[ch]>(counts[ch]||0)){render('That letter is not in POPULARITY enough times');return}}found.push(v);beep(880,.2);if(found.length>=5){render('All found!');finish()}else render('Nice! That counts.')};};render()}
+else if(id==='crossword'){let ans='COCOA';let render=(msg='')=>{el.innerHTML='<div style="font-weight:800;margin-bottom:8px">Warm drink, 5 letters</div><div style="display:flex;gap:6px;justify-content:center">'+ans.split('').map((_,i)=>'<input class="cw" maxlength="1" style="width:52px;height:52px;text-align:center;font-size:24px;font-weight:900;text-transform:uppercase">').join('')+'</div><button class="big" id="cwBtn" style="margin-top:12px">Check</button><div style="font-weight:800;margin-top:8px">'+msg+'</div>';let ins=el.querySelectorAll('.cw');ins[0].focus();ins.forEach((inp,i)=>inp.oninput=()=>{inp.value=inp.value.toUpperCase();if(inp.value&&ins[i+1])ins[i+1].focus()});document.getElementById('cwBtn').onclick=()=>{let v=[...ins].map(i=>i.value).join('');if(v===ans){render('Correct!');finish()}else{ins.forEach(i=>i.style.borderColor='#ff5d5d');render('Try again, no loss')}}};render()}
+else if(id==='difference'){let items=pickItems(3);let tiles=[items[0],items[0],items[1]].sort(()=>Math.random()-.5);el.innerHTML='<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px">'+tiles.map((t,i)=>'<div data-i="'+i+'" style="cursor:pointer">'+tileImg(t)+'</div>').join('')+'</div><div id="diffMsg" style="font-weight:800;margin-top:8px"></div>';el.querySelectorAll('[data-i]').forEach(d=>d.onclick=()=>{let t=tiles[+d.dataset.i];if(t===items[1]){finish()}else{d.style.opacity='.4';document.getElementById('diffMsg').textContent='Same, try another'}})}
+else if(id==='oddone'){let by={};PAIRS.forEach(function(pr){(by[pr[4]]=by[pr[4]]||[]).push(pr[0],pr[1])});let buckets=Object.keys(by).filter(b=>by[b].length>=3);let b1=buckets[Math.floor(Math.random()*buckets.length)];let b2=buckets.filter(b=>b!==b1)[Math.floor(Math.random()*(buckets.length-1))];let same=[...new Set(by[b1])].sort(()=>Math.random()-.5).slice(0,3);let diff=[...new Set(by[b2])].sort(()=>Math.random()-.5)[0];let tiles=[same[0],same[1],same[2],diff].sort(()=>Math.random()-.5);el.innerHTML='<div style="display:grid;grid-template-columns:1fr 1fr;gap:4px">'+tiles.map((t,i)=>'<button type="button" data-idx="'+i+'" style="background:transparent;border:0;padding:0;cursor:pointer;text-align:left">'+tileImg(t)+'</button>').join('')+'</div><div id="oddMsg" style="font-weight:800;margin-top:8px"></div>';el.querySelectorAll('[data-idx]').forEach(b=>{let t=tiles[+b.dataset.idx];b.onclick=()=>{if(t===diff){b.style.outline='4px solid #4caf50';b.style.borderRadius='18px';beep(880,.2);finish()}else{b.style.opacity='.4';document.getElementById('oddMsg').textContent='That one belongs, try another'}}})}
+else if(id==='sort'){let buckets=['cozy','food','seasons'];let items=[];buckets.forEach(b=>{let pr=PAIRS.filter(p=>p[4]===b);let p=pr[Math.floor(Math.random()*pr.length)];items.push({name:Math.random()<.5?p[0]:p[1],bucket:b})});let idx=0,sorted=0;let render=()=>{if(idx>=items.length){finish();return}let it=items[idx];el.innerHTML=tileImg(it.name)+'<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;margin-top:8px">'+buckets.map(b=>'<button class="big" data-b="'+b+'">'+b+'</button>').join('')+'</div>';el.querySelectorAll('[data-b]').forEach(b=>b.onclick=()=>{if(b.dataset.b===it.bucket){beep(880,.2);idx++;sorted++;render()}else{b.style.opacity='.4'}})};render()}
+else if(id==='spotpair'){let items=pickItems(3);let tiles=[items[0],items[0],items[1],items[2]].sort(()=>Math.random()-.5);let sel=[];el.innerHTML='<div style="display:grid;grid-template-columns:1fr 1fr;gap:4px">'+tiles.map((t,i)=>'<div data-i="'+i+'" style="cursor:pointer">'+tileImg(t)+'</div>').join('')+'</div><div id="spotMsg" style="font-weight:800;margin-top:8px"></div>';let divs=el.querySelectorAll('[data-i]');divs.forEach(d=>d.onclick=()=>{let i=+d.dataset.i;if(sel.includes(i))return;sel.push(i);d.style.border='3px solid #ff8a3d';d.style.borderRadius='18px';if(sel.length===2){if(tiles[sel[0]]===tiles[sel[1]]){finish()}else{let s2=sel;setTimeout(()=>{s2.forEach(j=>{divs[j].style.border='';divs[j].style.borderRadius=''});sel=[];document.getElementById('spotMsg').textContent='Not a match, try again'},700);sel=[]}}})}
+else if(id==='missing'){let items=pickItems(4);let missing=items[Math.floor(Math.random()*items.length)];let shown=items.filter(x=>x!==missing);let opts=[missing,...pickItems(3).filter(x=>!items.includes(x)).slice(0,2)].sort(()=>Math.random()-.5);el.innerHTML='<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px">'+shown.map(t=>tileImg(t)).join('')+'</div><div style="font-weight:800;margin:12px 0">One went missing. Which?</div>';setTimeout(()=>{if(!document.getElementById('miniScreen').classList.contains('active'))return;el.innerHTML='<div style="font-weight:800;margin-bottom:8px">One went missing. Which?</div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px">'+opts.map(t=>'<div data-t="'+t+'" style="cursor:pointer">'+tileImg(t)+'</div>').join('')+'</div><div id="missMsg" style="font-weight:800;margin-top:8px"></div>';el.querySelectorAll('[data-t]').forEach(d=>d.onclick=()=>{if(d.dataset.t===missing){finish()}else{d.style.opacity='.4';document.getElementById('missMsg').textContent='No, that one is still here'}})},2500)}
+else if(id==='arrow'){let steps=0;let render=()=>{el.innerHTML='<div style="font-size:60px;margin:8px 0">'+'🚚'.padStart(1,'')+'</div><div style="font-weight:800">Truck steps: '+steps+' / 3</div><div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:4px;margin-top:12px">'+['⬆️','⬇️','⬅️','➡️'].map((a,i)=>'<button class="big" data-a="'+i+'" style="font-size:36px">'+a+'</button>').join('')+'</div><div id="arrMsg" style="font-weight:800;margin-top:8px"></div>';el.querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>{if(+b.dataset.a===3){steps++;beep(880,.2);if(steps>=3){finish()}else render()}else{document.getElementById('arrMsg').textContent='Blocked, try another'}})};render()}
+else if(id==='ballsort'){let tubes=[['red','blue','green'],['blue','green','red'],['green','red','blue'],[]];let held=null;let render=(msg='')=>{el.innerHTML='<div style="display:flex;gap:8px;justify-content:center">'+tubes.map((t,i)=>'<div data-t="'+i+'" style="cursor:pointer;width:70px;min-height:160px;border:3px solid #e8c9a0;border-radius:12px;background:#fffdf6;display:flex;flex-direction:column-reverse;align-items:center;padding:6px;gap:4px">'+t.map(c=>'<div style="width:52px;height:52px;border-radius:50%;background:'+c+';border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.2)"></div>').join('')+'</div>').join('')+'</div><div style="font-weight:800;margin-top:8px">'+msg+'</div>';el.querySelectorAll('[data-t]').forEach(d=>d.onclick=()=>{let i=+d.dataset.t;if(held===null){if(tubes[i].length){held={from:i,color:tubes[i][tubes[i].length-1]};render('Holding '+held.color+' ball')}else render('That tube is empty')}else{if(i===held.from){held=null;render('')}else if(tubes[i].length===0||tubes[i][tubes[i].length-1]===held.color){tubes[held.from].pop();tubes[i].push(held.color);held=null;beep(700,.15);let win=tubes.every(t=>t.length===0||t.every(c=>c===t[0]));if(win){render('All sorted!');finish()}else render('')}else{held=null;render('Cannot drop there, try another tube')}}})};render()}
+else if(id==='scramble'){let words=pickItems(20).filter(w=>/^[A-Z ]+$/.test(w.toUpperCase())&&w.replace(/ /g,'').length>=3&&w.replace(/ /g,'').length<=6);let word=(words[0]||'COZY').toUpperCase().replace(/ /g,'');let scr=word.split('').sort(()=>Math.random()-.5);while(scr.join('')===word)scr=word.split('').sort(()=>Math.random()-.5);let built=[];let render=(msg='')=>{el.innerHTML='<div style="font-weight:800;margin-bottom:8px">Unscramble: '+scr.join(' ')+'</div><div style="font-weight:800;min-height:32px;font-size:24px;letter-spacing:4px">'+built.join('')+'</div><div style="display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-top:8px">'+scr.map((ch,i)=>'<button class="big" data-i="'+i+'" style="width:auto;padding:14px 18px;font-size:24px;'+(built.includes(i)?'opacity:.3':'')+'">'+ch+'</button>').join('')+'</div><div style="font-weight:800;margin-top:8px">'+msg+'</div>';el.querySelectorAll('[data-i]').forEach(b=>b.onclick=()=>{let i=+b.dataset.i;if(built.includes(i))return;built.push(i);let v=built.map(j=>scr[j]).join('');if(built.length===word.length){if(v===word){render('Correct!');finish()}else{built=[];render('Try again')}}else render('')})};render()}
+else if(id==='connect'){let word='COZY';let letters=word.split('').sort(()=>Math.random()-.5);let built=[];let render=(msg='')=>{el.innerHTML='<div style="font-weight:800;margin-bottom:8px">Spell COZY, in order</div><div style="font-weight:800;min-height:32px;font-size:24px;letter-spacing:4px">'+built.join('')+'</div><div style="display:flex;gap:6px;justify-content:center;margin-top:8px">'+letters.map((ch,i)=>'<button class="big" data-i="'+i+'" style="width:auto;padding:14px 18px;font-size:24px;'+(built.includes(i)?'opacity:.3':'')+'">'+ch+'</button>').join('')+'</div><div style="font-weight:800;margin-top:8px">'+msg+'</div>';el.querySelectorAll('[data-i]').forEach(b=>b.onclick=()=>{let i=+b.dataset.i;if(built.includes(i))return;built.push(i);let v=built.map(j=>letters[j]).join('');if(!word.startsWith(v)){built=[];render('Wrong order, try again');return}if(v===word){render('You spelled COZY!');finish()}else render('')})};render()}
+else if(id==='hammer'){let n=0;el.innerHTML='<div style="font-size:80px">🔨</div><div style="font-size:40px">📌</div><div id="hammerMsg" style="font-weight:800">Nail: 0%</div><button class="big" id="hammerBtn" style="margin-top:12px">Hammer!</button>';document.getElementById('hammerBtn').onclick=()=>{n+=20;beep(150,.1,'square',.12);try{navigator.vibrate&&navigator.vibrate(30)}catch(e){}document.getElementById('hammerMsg').textContent='Nail: '+n+'%';if(n>=100){document.getElementById('hammerMsg').textContent='Nailed it!';finish()}}}
+else if(id==='balloon'){let size=60;el.innerHTML='<div id="balloon" style="font-size:60px;transition:font-size .2s;cursor:pointer">🎈</div><div id="balloonMsg" style="font-weight:800">Hold to blow, let go between big and popping</div>';let b=document.getElementById('balloon');let timer=null;b.addEventListener('pointerdown',()=>{timer=setInterval(()=>{size+=10;if(size>190){clearInterval(timer);document.getElementById('balloonMsg').textContent='Pop! Try again';size=0;b.style.fontSize='60px'}else{b.style.fontSize=size+'px';beep(400+size,.1)}},100)});b.addEventListener('pointerup',()=>{clearInterval(timer);if(size===0)return;if(size>=140&&size<=190){document.getElementById('balloonMsg').textContent='Perfect size!';finish()}else if(size<140){document.getElementById('balloonMsg').textContent='Too small, hold a little longer'}})}
+else if(id==='paint'){let cov=0;el.innerHTML='<div id="wall" style="height:180px;background:#eee;border:3px solid #e8c9a0;border-radius:12px;position:relative;overflow:hidden"><div id="paintFill" style="position:absolute;left:0;top:0;height:100%;width:0%;background:#ff8a3d"></div></div><div id="paintMsg" style="font-weight:800;margin-top:8px">Painted: 0%</div>';let w=document.getElementById('wall');let painting=false;w.addEventListener('pointerdown',()=>painting=true);w.addEventListener('pointerup',()=>painting=false);w.addEventListener('pointermove',()=>{if(!painting)return;cov=Math.min(100,cov+10);document.getElementById('paintFill').style.width=cov+'%';document.getElementById('paintMsg').textContent='Painted: '+cov+'%';if(cov>=100){document.getElementById('paintMsg').textContent='Wall painted!';finish()}})}
+else if(id==='simon'){playSimon(el)}
+}
+
+let results=[];
+function log(id,ok,detail){results.push({id,ok,detail});let d=document.getElementById('results');d.innerHTML+= '<div>'+id+': '+(ok?'PASS':'FAIL')+' '+detail+'</div>';}
+const $=id=>document.getElementById(id);
+function beep(){}
+function addXP(){}
+let finished=false;
+async function buildRun(){finished=true;return []}
+let runIdx=0;
+function nextPairs(){finished=true}
+let miniTitle=document.createElement('div'); miniTitle.id='miniTitle'; document.body.appendChild(miniTitle);
+let miniPlay=document.createElement('div'); miniPlay.id='miniPlay'; document.body.appendChild(miniPlay);
+let miniScreen=document.createElement('div'); miniScreen.id='miniScreen'; miniScreen.classList.add('active'); document.body.appendChild(miniScreen);
+miniScreen.appendChild(miniTitle); miniScreen.appendChild(miniPlay);
+function sleep(ms){return new Promise(r=>setTimeout(r,ms))}
+function click(el){el.dispatchEvent(new MouseEvent('click',{bubbles:true}));}
+async function waitFinish(timeout=5000){let t0=Date.now();while(Date.now()-t0<timeout){if(finished)return true;await sleep(100)}return false}
+async function runOne(id,play){
+  finished=false; window._miniDone=false;
+  try{ playMini(id); await sleep(200); await play(); let ok=await waitFinish(4000); log(id,ok,ok?'finished':'no finish'); }
+  catch(e){ log(id,false,'error '+e.message+' '+e.stack.split('\n')[0]) }
+}
+function nameFromTile(tile){let d=tile.querySelector('div div'); return d?d.textContent.trim():''}
+function bucketOf(name){for(let pr of PAIRS){if(pr[0]===name||pr[1]===name)return pr[4]}return null}
+async function testAll(){
+  // wordsearch: known placements
+  await runOne('wordsearch', async()=>{
+    let btns=[...document.querySelectorAll('#miniPlay button[data-r]')];
+    let get=(r,c)=>btns.find(b=>+b.dataset.r===r&&+b.dataset.c===c);
+    [[0,0],[0,1],[0,2],[0,3]].forEach(([r,c])=>click(get(r,c)));
+    await sleep(100);
+    [[0,6],[1,6],[2,6],[3,6],[4,6]].forEach(([r,c])=>click(get(r,c)));
+    await sleep(100);
+    [[5,0],[5,1],[5,2],[5,3],[5,4],[5,5]].forEach(([r,c])=>click(get(r,c)));
+  });
+  // howmany
+  await runOne('howmany', async()=>{
+    for(let w of ['POP','ART','TOP','PLAY','RAT']){
+      document.getElementById('hwInput').value=w; click(document.getElementById('hwBtn')); await sleep(100);
+    }
+  });
+  // crossword
+  await runOne('crossword', async()=>{
+    let ins=document.querySelectorAll('#miniPlay .cw');
+    'COCOA'.split('').forEach((ch,i)=>{ins[i].value=ch; ins[i].dispatchEvent(new Event('input',{bubbles:true}))});
+    click(document.getElementById('cwBtn'));
+  });
+  // difference: click tile with unique image src
+  await runOne('difference', async()=>{
+    let tiles=[...document.querySelectorAll('#miniPlay [data-i]')];
+    let srcs=tiles.map(t=>t.querySelector('img').src);
+    let uniq=srcs.find(src=>srcs.filter(s=>s===src).length===1);
+    click(tiles[srcs.indexOf(uniq)]);
+  });
+  // oddone: read names, bucket, click odd bucket
+  await runOne('oddone', async()=>{
+    let btns=[...document.querySelectorAll('#miniPlay [data-idx]')];
+    let names=btns.map(b=>nameFromTile(b));
+    let buckets=names.map(bucketOf);
+    let oddIdx=buckets.findIndex(b=>buckets.filter(x=>x===b).length===1);
+    if(oddIdx<0) throw new Error('no odd bucket in '+names.join(',')+' / '+buckets.join(','));
+    click(btns[oddIdx]);
+  });
+  // sort: click correct bucket 3 times
+  await runOne('sort', async()=>{
+    for(let round=0; round<3; round++){
+      await sleep(100);
+      let name=nameFromTile(document.querySelector('#miniPlay'));
+      // tileImg first div is the item tile, its name div is second level
+      let tile=document.querySelector('#miniPlay > div');
+      let nm=tile.querySelector('div').textContent.trim();
+      let b=bucketOf(nm);
+      let btn=[...document.querySelectorAll('#miniPlay [data-b]')].find(x=>x.dataset.b===b);
+      if(!btn) throw new Error('no bucket btn for '+nm+'/'+b);
+      click(btn);
+    }
+  });
+  // spotpair: click two tiles with same image src
+  await runOne('spotpair', async()=>{
+    let tiles=[...document.querySelectorAll('#miniPlay [data-i]')];
+    let srcs=tiles.map(t=>t.querySelector('img').src);
+    let dup=srcs.find(src=>srcs.filter(s=>s===src).length===2);
+    let idxs=srcs.map((s,i)=>s===dup?i:-1).filter(i=>i>=0);
+    click(tiles[idxs[0]]); await sleep(100); click(tiles[idxs[1]]);
+  });
+  // missing: brute force options over up to 3 runs
+  let missingOk=false;
+  for(let attempt=0; attempt<3 && !missingOk; attempt++){
+    finished=false; window._miniDone=false;
+    try{
+      playMini('missing'); await sleep(2700);
+      let opts=[...document.querySelectorAll('#miniPlay [data-t]')];
+      if(!opts.length) throw new Error('no options');
+      click(opts[attempt % opts.length]);
+      missingOk=await waitFinish(2000);
+    }catch(e){ log('missing-attempt',false,e.message) }
+  }
+  log('missing', missingOk, missingOk?'finished on an attempt':'never finished');
+  // arrow: click right arrow 3 times
+  await runOne('arrow', async()=>{
+    for(let i=0;i<3;i++){ await sleep(100); let btn=[...document.querySelectorAll('#miniPlay [data-a]')].find(x=>+x.dataset.a===3); click(btn); }
+  });
+  // ballsort: BFS solver, click tubes
+  await runOne('ballsort', async()=>{
+    // read tubes from DOM: each tube div has balls as colored divs in DOM order (bottom to top? DOM order is array order)
+    function readTubes(){
+      return [...document.querySelectorAll('#miniPlay [data-t]')].map(t=>{
+        let balls=[...t.querySelectorAll('div div')].map(d=>d.style.background).filter(Boolean);
+        // DOM order is array order, top is last
+        return balls;
+      });
+    }
+    // BFS in color space, using DOM reads after each move is complex; instead solve from initial state known in code: RBG, BGR, GRB, empty
+    // Use a generic BFS on state strings, then execute moves, re-reading after each pick/drop
+    let state=[['red','blue','green'],['blue','green','red'],['green','red','blue'],[]];
+    function key(s){return s.map(t=>t.join(',')).join('|')}
+    function win(s){return s.every(t=>t.length===0||t.every(c=>c===t[0]))}
+    function bfs(start){
+      let q=[[start,[]]], seen=new Set([key(start)]);
+      while(q.length){let [s,path]=q.shift(); if(win(s)) return path; for(let i=0;i<s.length;i++){ if(!s[i].length) continue; let top=s[i][s[i].length-1]; for(let j=0;j<s.length;j++){ if(i===j) continue; if(s[j].length===0||s[j][s[j].length-1]===top){ let ns=s.map(t=>[...t]); ns[i].pop(); ns[j].push(top); let k=key(ns); if(!seen.has(k)){seen.add(k); q.push([ns,[...path,[i,j]]])} } } } }
+      return null;
+    }
+    let plan=bfs(state);
+    if(!plan) throw new Error('no BFS plan');
+    for(let [from,to] of plan){
+      let tubes=[...document.querySelectorAll('#miniPlay [data-t]')];
+      click(tubes[from]); await sleep(150);
+      tubes=[...document.querySelectorAll('#miniPlay [data-t]')];
+      click(tubes[to]); await sleep(150);
+    }
+  });
+  // scramble: find word matching scrambled letters
+  await runOne('scramble', async()=>{
+    let txt=document.querySelector('#miniPlay').textContent;
+    let m=txt.match(/Unscramble:\s*([A-Z ]+)/);
+    let scr=(m[1].replace(/ /g,'')).split('');
+    let cand=null;
+    for(let pr of PAIRS){ for(let nm of [pr[0],pr[1]]){ let w=nm.toUpperCase().replace(/ /g,''); if(w.length===scr.length && w.split('').sort().join('')===scr.slice().sort().join('')){cand=w;break} } if(cand) break }
+    if(!cand) throw new Error('no word for '+scr.join(''));
+    let btns=[...document.querySelectorAll('#miniPlay [data-i]')];
+    // buttons show scrambled letters in order, need to click in cand order, handling duplicates by using each button once
+    let used=new Set();
+    for(let ch of cand){
+      let b=btns.find((x,i)=>!used.has(i)&&x.textContent.trim()===ch);
+      if(!b) throw new Error('no letter '+ch);
+      used.add(btns.indexOf(b)); click(b); await sleep(50);
+    }
+  });
+  // connect: C O Z Y
+  await runOne('connect', async()=>{
+    let btns=[...document.querySelectorAll('#miniPlay [data-i]')];
+    for(let ch of 'COZY'){ let b=btns.find(x=>x.textContent.trim()===ch && !x.style.opacity); if(!b) b=btns.find(x=>x.textContent.trim()===ch); click(b); await sleep(50); }
+  });
+  // simon: record lit pads during playback, then repeat, until finish (pattern 5)
+  // playSimon is not in playMini's simon branch? it is: playSimon(el)
+  // For test, run simon and attempt recording for up to 6 rounds
+  finished=false; window._miniDone=false;
+  try{
+    playMini('simon'); await sleep(300);
+    for(let round=0; round<6 && !finished; round++){
+      // wait for playback to start and collect lit pads
+      let seq=[]; let last=-1; let idle=0;
+      // poll opacity for up to 6 seconds, collecting transitions to opacity 1
+      let t0=Date.now();
+      while(Date.now()-t0<6000){
+        let pads=[...document.querySelectorAll('#miniPlay .simonbtn')];
+        if(!pads.length) break;
+        pads.forEach((p,i)=>{ if(p.style.opacity==='1' && last!==i){ seq.push(i); last=i; } else if(p.style.opacity!=='1' && last===i){ /* keep last until next */ } });
+        let msg=document.getElementById('simonMsg');
+        if(msg && msg.textContent==='Your turn') break;
+        await sleep(80);
+      }
+      // click recorded sequence, deduplicate consecutive? playback lights each beat once, so seq may have duplicates from polling - compress consecutive duplicates
+      let comp=[]; seq.forEach(x=>{ if(comp[comp.length-1]!==x) comp.push(x) });
+      // If comp is empty, break
+      if(!comp.length) break;
+      let pads=[...document.querySelectorAll('#miniPlay .simonbtn')];
+      for(let idx of comp){ click(pads[idx]); await sleep(200); }
+      await sleep(500);
+      finished=await waitFinish(200);
+      if(finished) break;
+    }
+    log('simon', finished, finished?'finished':'no finish after recording attempts');
+  }catch(e){ log('simon', false, 'error '+e.message) }
+  // hammer
+  await runOne('hammer', async()=>{ for(let i=0;i<5;i++){ click(document.getElementById('hammerBtn')); await sleep(50); } });
+  // balloon: hold ~1s, release in zone
+  await runOne('balloon', async()=>{
+    let b=document.getElementById('balloon');
+    b.dispatchEvent(new PointerEvent('pointerdown',{bubbles:true}));
+    await sleep(1000);
+    b.dispatchEvent(new PointerEvent('pointerup',{bubbles:true}));
+  });
+  // paint: pointerdown + moves
+  await runOne('paint', async()=>{
+    let w=document.getElementById('wall');
+    w.dispatchEvent(new PointerEvent('pointerdown',{bubbles:true}));
+    for(let i=0;i<12;i++){ w.dispatchEvent(new PointerEvent('pointermove',{bubbles:true})); await sleep(30); }
+    w.dispatchEvent(new PointerEvent('pointerup',{bubbles:true}));
+  });
+  document.getElementById('summary').textContent = 'DONE ' + results.filter(r=>r.ok).length + '/' + results.length + ' passed';
+}
+window.addEventListener('load', testAll);
+
+</script></body></html>
