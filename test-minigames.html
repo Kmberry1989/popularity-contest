@@ -82,7 +82,7 @@ async function runOne(id,play){
   try{ playMini(id); await sleep(200); await play(); let ok=await waitFinish(4000); log(id,ok,ok?'finished':'no finish'); }
   catch(e){ log(id,false,'error '+e.message+' '+e.stack.split('\n')[0]) }
 }
-function nameFromTile(tile){let d=tile.querySelector('div div'); return d?d.textContent.trim():''}
+function nameFromTile(tile){return tile.textContent.trim()}
 function bucketOf(name){for(let pr of PAIRS){if(pr[0]===name||pr[1]===name)return pr[4]}return null}
 async function testAll(){
   // wordsearch: known placements
