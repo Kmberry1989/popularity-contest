@@ -225,13 +225,13 @@ async function testAll(){
       while(Date.now()-t0<6000){
         let pads=[...document.querySelectorAll('#miniPlay .simonbtn')];
         if(!pads.length) break;
-        pads.forEach((p,i)=>{ if(p.style.opacity==='1' && last!==i){ seq.push(i); last=i; } else if(p.style.opacity!=='1' && last===i){ /* keep last until next */ } });
+        pads.forEach((p,i)=>{ if(p.style.opacity==='1' && last!==i){ seq.push(i); last=i; } else if(p.style.opacity!=='1' && last===i){ last=-1; } });
         let msg=document.getElementById('simonMsg');
         if(msg && msg.textContent==='Your turn') break;
         await sleep(80);
       }
       // click recorded sequence, deduplicate consecutive? playback lights each beat once, so seq may have duplicates from polling - compress consecutive duplicates
-      let comp=[]; seq.forEach(x=>{ if(comp[comp.length-1]!==x) comp.push(x) });
+      let comp=seq;
       // If comp is empty, break
       if(!comp.length) break;
       let pads=[...document.querySelectorAll('#miniPlay .simonbtn')];
