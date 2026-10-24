@@ -328,7 +328,7 @@ const MINI_GAMES=[
 {id:'hammer',name:'Hammer Nails',desc:'Tap fast to hammer the nail in'},
 {id:'balloon',name:'Blow Up Balloon',desc:'Hold to blow, let go before it pops'},
 {id:'paint',name:'Paint the Wall',desc:'Drag to paint the wall'},
-,{id:'cups',name:'Cup Shuffle',desc:'Watch the cups, find the prize'}];
+{id:'cups',name:'Cup Shuffle',desc:'Watch the cups, find the prize'}];
 $('miniBackBtn').onclick=()=>show('menuScreen');
 
 function playSimon(el){
@@ -422,5 +422,5 @@ let _memParam=new URLSearchParams(location.search).get('memory');
 if(_memParam){setTimeout(()=>{show('memoryScreen');startMemory()},300);}
 let _miniParam=new URLSearchParams(location.search).get('mini');
 if(_miniParam&&MINI_GAMES.some(g=>g.id===_miniParam)){setTimeout(()=>{show('miniScreen');if(_miniParam==='simon'){playSimonCycle()}else{playMini(_miniParam)}},300);}
-</script><script>if(location.search.indexOf('mini=')===-1){setTimeout(function(){var sp=document.getElementById("splashScreen");if(sp){sp.classList.remove("active");var m=document.getElementById("menuScreen");if(m)m.classList.add("active")}},2600);}
+</script><script>if(location.search.indexOf('mini=')===-1&&location.search.indexOf('memory=')===-1){setTimeout(function(){var sp=document.getElementById("splashScreen");if(sp){sp.classList.remove("active");var m=document.getElementById("menuScreen");if(m)m.classList.add("active")}},2600);}
 </script></body></html>
