@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Facebook SDK Test</title></head>
+<body style="font-family:sans-serif;padding:20px">
+<h1>Facebook SDK Test</h1>
+<div id="status" style="font-weight:800">Loading SDK…</div>
+<button id="loginBtn" style="font-size:18px;padding:12px;margin-top:16px">Login with Facebook</button>
+<div id="result" style="margin-top:16px"></div>
+<script>
+var statusEl=document.getElementById('status'), resultEl=document.getElementById('result');
+function setStatus(t){statusEl.textContent=t;}
+var s=document.createElement('script');
+s.src='https://connect.facebook.net/en_US/sdk.js';
+s.async=true;
+s.onload=function(){
+  try{
+    FB.init({appId:'1633631488232747', version:'v21.0', xfbml:false});
+    setStatus('SDK loaded, FB.init done, window.FB='+(typeof FB));
+    FB.getLoginStatus(function(r){
+      setStatus('SDK loaded, FB.init done, getLoginStatus status='+(r&&r.status));
+      resultEl.textContent='getLoginStatus: '+JSON.stringify(r);
+    });
+  }catch(e){ setStatus('FB.init failed: '+e.message); }
+};
+s.onerror=function(){ setStatus('SDK script failed to load (onerror)'); };
+document.head.appendChild(s);
+setTimeout(function(){ if(statusEl.textContent.indexOf('Loading SDK')===0) setStatus('SDK still loading after 15s (timeout)'); },15000);
+document.getElementById('loginBtn').onclick=function(){
+  resultEl.textContent='Login clicked, calling FB.login…';
+  FB.login(function(r){
+    resultEl.textContent='FB.login result: '+JSON.stringify(r);
+  }, {scope:'user_friends,public_profile'});
+};
+</script>
+</body></html>
