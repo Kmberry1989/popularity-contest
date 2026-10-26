@@ -8,12 +8,12 @@ button{border:3px solid #e8c9a0;border-radius:12px;background:#ffe9c9;color:#3b2
 button:active{transform:translateY(2px);box-shadow:0 1px 0 #d9a86a}
 button.big{width:100%;padding:20px;font-size:22px;background:#ff8a3d;color:#3b2a1e}
 button.small{padding:8px 14px;font-size:15px;min-height:40px;background:#fff}.brandfont{font-family:'Fredoka',system-ui,sans-serif;letter-spacing:.02em}.authbtn{display:flex;align-items:center;justify-content:center;gap:8px;width:min(280px,88vw);min-height:52px;padding:12px 16px;font-size:16px}.authbtn svg{width:24px;height:24px;flex:none}
-#avatarImg{cursor:pointer;animation:avatarglow 2.2s ease-in-out infinite}
-@keyframes avatarglow{0%,100%{box-shadow:0 0 0 rgba(255,138,61,0)}50%{box-shadow:0 0 28px rgba(255,138,61,.9),0 0 48px rgba(255,93,143,.45)}}
-.authbtn{animation:authpulse 2.2s ease-in-out infinite}
-@keyframes authpulse{0%,100%{border-color:#e8c9a0;box-shadow:0 3px 0 #d9a86a,0 0 0 rgba(255,138,61,0);transform:scale(1)}50%{border-color:#ff8a3d;box-shadow:0 3px 0 #d9a86a,0 0 28px rgba(255,138,61,.85),0 0 48px rgba(255,93,143,.45);transform:scale(1.03)}}
-#fbConnectBtn,#fbConnectBtn2{animation:fbpulse 2.2s ease-in-out infinite}
-@keyframes fbpulse{0%,100%{border-color:#1877F2;box-shadow:0 3px 0 #0f5bb5,0 0 0 rgba(24,119,242,0);transform:scale(1)}50%{border-color:#7ab0ff;box-shadow:0 3px 0 #0f5bb5,0 0 28px rgba(24,119,242,.9),0 0 48px rgba(122,176,255,.5);transform:scale(1.03)}}
+#avatarImg{cursor:pointer;animation:avatarglow 1.6s ease-in-out infinite}
+@keyframes avatarglow{0%,100%{box-shadow:0 0 20px rgba(255,138,61,.3),0 0 32px rgba(255,93,143,.15)}50%{box-shadow:0 0 20px rgba(255,138,61,.6),0 0 32px rgba(255,93,143,.3)}}
+.authbtn{animation:authpulse 1.6s ease-in-out infinite}
+@keyframes authpulse{0%,100%{border-color:#e8c9a0;box-shadow:0 3px 0 #d9a86a,0 0 20px rgba(255,138,61,.3),0 0 32px rgba(255,93,143,.15);transform:scale(1)}50%{border-color:#ff8a3d;box-shadow:0 3px 0 #d9a86a,0 0 20px rgba(255,138,61,.6),0 0 32px rgba(255,93,143,.3);transform:scale(1.02)}}
+#fbConnectBtn,#fbConnectBtn2{animation:fbpulse 1.6s ease-in-out infinite}
+@keyframes fbpulse{0%,100%{border-color:#1877F2;box-shadow:0 3px 0 #0f5bb5,0 0 20px rgba(24,119,242,.3),0 0 32px rgba(122,176,255,.15);transform:scale(1)}50%{border-color:#7ab0ff;box-shadow:0 3px 0 #0f5bb5,0 0 20px rgba(24,119,242,.6),0 0 32px rgba(122,176,255,.3);transform:scale(1.02)}}
 input{width:100%;padding:12px;border-radius:12px;border:2px solid #e8c9a0;font-size:17px;color:#3b2a1e}
 .dots{display:flex;gap:8px;justify-content:center;padding:8px}
 .dot{width:12px;height:12px;border-radius:50%;background:#e8c9a0}.dot.on{background:#ff8a3d}
@@ -38,15 +38,15 @@ input{width:100%;padding:12px;border-radius:12px;border:2px solid #e8c9a0;font-s
 .float{position:fixed;width:28px;height:28px;border-radius:50%;background:rgba(255,138,61,.25);z-index:0;animation:floaty 7s ease-in-out infinite;pointer-events:none}
 @keyframes floaty{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-24px) rotate(20deg)}}
 .screen{position:relative;z-index:1}
-.playgraphic{position:relative;width:180px;height:180px;border:0;background:transparent;box-shadow:none!important;padding:0;animation:playcombo 2s ease-in-out infinite,playglow 2.2s ease-in-out infinite}
+.playgraphic{position:relative;width:180px;height:180px;border:0;background:transparent;box-shadow:none!important;padding:0;animation:playcombo 2s ease-in-out infinite,playglow 1.6s ease-in-out infinite}
 .playgraphic:hover{transform:scale(1.08)} .playgraphic:active{transform:scale(.92)}
 .playgraphic img{width:100%;height:100%;object-fit:contain;filter:none!important;box-shadow:none!important}
-.playgraphic.playtapped{animation:playglow 2.2s ease-in-out infinite}
-.playgraphic.playpressed{animation:playglow 2.2s ease-in-out infinite;transform:scale(1.08,.88)}
+.playgraphic.playtapped{animation:playglow 1.6s ease-in-out infinite}
+.playgraphic.playpressed{animation:playglow 1.6s ease-in-out infinite;transform:scale(1.08,.88)}
 .playgraphic.playpressed img{transform:scale(.92) translateY(3px);transition:transform .15s ease}
 .playgraphic.playpressed::after{content:'';position:absolute;inset:0;border:4px solid rgba(255,138,61,.8);border-radius:50%;animation:playripple .6s ease-out forwards;pointer-events:none}
 .screen.screen-fadeout{opacity:0}.screen.screen-fadein{opacity:0}
-@keyframes splashfade{from{opacity:1}to{opacity:1}}@keyframes bob{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-8px) scale(1.04)}}@keyframes playcombo{0%,100%{transform:translateY(0) rotate(0) scale(1)}12%{transform:translateY(-6px) rotate(-4deg) scale(1.02)}24%{transform:translateY(-2px) rotate(4deg) scale(1.02)}36%{transform:translateY(0) rotate(0) scale(1.04)}48%{transform:translateY(0) rotate(0) scale(1)}}@keyframes playripple{from{transform:scale(1);opacity:1}to{transform:scale(1.35);opacity:0}}@keyframes playglow{0%,100%{filter:drop-shadow(0 0 0 rgba(255,138,61,0))}50%{filter:drop-shadow(0 0 36px rgba(255,138,61,.9)) drop-shadow(0 0 56px rgba(255,93,143,.5))}}
+@keyframes splashfade{from{opacity:1}to{opacity:1}}@keyframes bob{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-8px) scale(1.04)}}@keyframes playcombo{0%,100%{transform:translateY(0) rotate(0) scale(1)}12%{transform:translateY(-6px) rotate(-4deg) scale(1.02)}24%{transform:translateY(-2px) rotate(4deg) scale(1.02)}36%{transform:translateY(0) rotate(0) scale(1.04)}48%{transform:translateY(0) rotate(0) scale(1)}}@keyframes playripple{from{transform:scale(1);opacity:1}to{transform:scale(1.35);opacity:0}}@keyframes playglow{0%,100%{filter:drop-shadow(0 0 24px rgba(255,138,61,.3)) drop-shadow(0 0 36px rgba(255,93,143,.15))}50%{filter:drop-shadow(0 0 24px rgba(255,138,61,.6)) drop-shadow(0 0 36px rgba(255,93,143,.3))}}
 #confirmBtn{animation:pulse 1s ease-in-out infinite}
 @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
 .holdfill{position:absolute;left:0;bottom:0;width:100%;height:0%;background:rgba(76,175,80,.45);z-index:2;pointer-events:none}
@@ -108,8 +108,8 @@ input{width:100%;padding:12px;border-radius:12px;border:2px solid #e8c9a0;font-s
 @keyframes vortex{from{transform:rotate(0)}to{transform:rotate(360deg)}}
 @keyframes shufflefly{0%{transform:translateY(0) rotate(0)}50%{transform:translateY(-30px) rotate(10deg)}100%{transform:translateY(0) rotate(0)}}
 
-.title-letter{position:absolute;object-fit:contain;animation:titlebounce ease-in-out infinite,titleglow 2.2s ease-in-out infinite;will-change:transform}
-@keyframes titleglow{0%,100%{filter:drop-shadow(0 0 0 rgba(255,138,61,0))}50%{filter:drop-shadow(0 0 16px rgba(255,138,61,.85)) drop-shadow(0 0 28px rgba(255,217,61,.45))}}
+.title-letter{position:absolute;object-fit:contain;animation:titlebounce ease-in-out infinite,titleglow 1.6s ease-in-out infinite;will-change:transform}
+@keyframes titleglow{0%,100%{filter:drop-shadow(0 0 12px rgba(255,138,61,.3)) drop-shadow(0 0 20px rgba(255,217,61,.15))}50%{filter:drop-shadow(0 0 12px rgba(255,138,61,.6)) drop-shadow(0 0 20px rgba(255,217,61,.3))}}
 @keyframes titlebounce{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-10px) rotate(2deg)}}
 body.letters-flying .title-letter{animation:balloonfly 1.4s ease-in forwards;animation-delay:var(--fly-delay,0s)}
 @keyframes balloonfly{0%{transform:translateY(0) rotate(0);opacity:1}30%{transform:translateY(-40px) rotate(-6deg);opacity:1}100%{transform:translateY(-120vh) rotate(12deg);opacity:0}}
